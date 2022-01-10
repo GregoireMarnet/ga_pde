@@ -1,4 +1,5 @@
 #include "closed_form.hpp"
+#include "solver_pde.hpp"
 #include <iostream>
 
 
@@ -24,6 +25,5 @@
 // a payoff.
 int main(int argc, const char * argv[])
 {
-    std::cout << "coucou";
     return 0;
 }
