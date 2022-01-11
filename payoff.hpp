@@ -8,7 +8,7 @@ class payoff
 {
     public :
 
-        payoff(std::function<double(double)> function_spot);
+        payoff(const std::function<double(double)>& function_spot);
 
     protected :
 
