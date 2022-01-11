@@ -30,8 +30,8 @@ int main(int argc, const char * argv[])
 
     payoff::payoff_call test_payoff_call(strike);
     
-    std::cout << "Strike is :" << strike << std::endl;
-    std::cout << "Spot is :" << spot << std::endl;
+    std::cout << "Strike is : " << strike << std::endl;
+    std::cout << "Spot is : " << spot << std::endl;
 
     
     return 0;
