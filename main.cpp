@@ -25,11 +25,13 @@
 // a payoff.
 int main(int argc, const char * argv[])
 {
+    const double strike = 20;
+    const double spot = 22;
 
-    std::function<double(double)> test_funct = payoff::function_test;
-    payoff::payoff test_payoff(test_funct);
-
-    //std::cout << test_payoff.function(2.);
+    payoff::payoff_call test_payoff_call(strike);
+    
+    std::cout << "Strike is :" << strike << std::endl;
+    std::cout << "Spot is :" << spot << std::endl;
 
     
     return 0;
