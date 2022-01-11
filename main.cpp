@@ -24,6 +24,6 @@
 // a payoff.
 int main(int argc, const char * argv[])
 {
-    std::cout << "Test2";
+    std::cout << "Test3";
     return 0;
 }
