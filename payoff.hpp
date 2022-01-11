@@ -12,15 +12,20 @@ double function_test(double spot)
 class payoff
 {
     public :
-
-        payoff(const std::function<double(double)>& function_spot);
-        std::function<double(double)> function();
-
-    protected :
-
-        std::function<double(double)> p_payoff;
+        payoff();
+        virtual double operator() (const double& spot) const = 0;
 };
 
+class payoff_call : public payoff
+{
+    private : 
+        double p_strike;
+
+    public:
+        payoff_call(const double& strike);
+        virtual double operator() (const double& spot) const;
+
+};
 
 };
 

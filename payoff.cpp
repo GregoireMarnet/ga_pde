@@ -1,12 +1,20 @@
 #include "payoff.hpp"
+#include <algorithm> //for std::max function
 
 
-payoff::payoff(const std::function<double(double)>& function_spot)
-    : p_payoff(function_spot)
+namespace payoff
 {
+payoff::payoff(){} 
+
+payoff_call::payoff_call(const double& strike)
+{
+    p_strike = strike;
 }
 
-std::function<double(double)> function()
+double payoff_call::operator() (const double& spot) const
 {
-    return p_payoff;
+    return std::max(spot - strike, 0.0);
+}
+
+
 }
