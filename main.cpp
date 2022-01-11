@@ -1,4 +1,5 @@
 #include "closed_form.hpp"
+#include "payoff.hpp"
 #include <iostream>
 
 
@@ -24,6 +25,12 @@
 // a payoff.
 int main(int argc, const char * argv[])
 {
-    std::cout << "Test3";
+
+    std::function<double(double)> test_funct = payoff::function_test;
+    payoff::payoff test_payoff(test_funct);
+
+    //std::cout << test_payoff.function(2.);
+
+    
     return 0;
 }
