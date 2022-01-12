@@ -13,7 +13,7 @@ payoff_call::payoff_call(const double& strike)
 
 double payoff_call::operator() (const double& spot) const
 {
-    return std::max(spot - strike, 0.0);
+    return std::max(spot - p_strike, 0.0);
 }
 
 

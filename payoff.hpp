@@ -4,11 +4,6 @@
 namespace payoff
 {
 
-double function_test(double spot)
-    {
-        return spot*spot;
-    };
-
 class payoff
 {
     public :
