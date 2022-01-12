@@ -1,6 +1,7 @@
 #include "closed_form.hpp"
 #include "payoff.hpp"
 #include "boundary_conditions.hpp"
+
 #include <iostream>
 
 
@@ -43,6 +44,7 @@ int main(int argc, const char * argv[])
 
     std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
     std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl;
+
 
 
     

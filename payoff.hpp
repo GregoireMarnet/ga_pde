@@ -1,7 +1,9 @@
 #ifndef PAYOFF_HPP
 #define PAYOFF_HPP
 
+
 namespace dauphine
+
 {
 
 class payoff

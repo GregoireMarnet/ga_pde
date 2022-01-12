@@ -5,6 +5,7 @@ namespace dauphine
 {
     
 std::vector<double> solver_mesh(dauphine::payoff& payoff, 
+
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
                                 const Eigen::MatrixXd& c,
@@ -16,6 +17,7 @@ std::vector<double> solver_mesh(dauphine::payoff& payoff,
                                 const double& s_max,
                                 const int& n_dx,
                                 dauphine::boundary& bd) // need to define it
+
 
 {
     Eigen::Matrix<double, n_dx + 1, n_dt + 1> A;
