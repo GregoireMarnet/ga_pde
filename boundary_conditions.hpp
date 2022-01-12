@@ -10,8 +10,9 @@ class boundary
 {
     public:
         boundary();
-        virtual double get_upper_b() const =0;
-        virtual double get_lower_b() const =0;
+        double get_upper_b() const;
+        double get_lower_b() const;
+
 
     protected:
         double upper_b;
@@ -22,9 +23,7 @@ class dirichlet : public boundary
 {
     
     public:
-        dirichlet(dauphine::payoff payoff, double s_min, double s_max);
-        virtual double get_upper_b() const;
-        virtual double get_lower_b() const;
+        dirichlet(dauphine::payoff& payoff, double s_min, double s_max);
     
 };
 
