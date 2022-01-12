@@ -8,17 +8,17 @@
 namespace solver
 {
 std::vector<double> solver_mesh(payoff& payoff, 
-                                const Eigen::Matrix<double,2,2>& a,
-                                const std::vector<double>& b,
-                                const std::vector<double>& c,
-                                const std::vector<double>& d,
+                                const Eigen::MatrixXd& a,
+                                const Eigen::MatrixXd& b,
+                                const Eigen::MatrixXd& c,
+                                const Eigen::MatrixXd& d,
                                 const double& theta,
                                 const double& T,
-                                const double& dt,
+                                const int& n_dt,
                                 const double& s_min,
                                 const double& s_max,
-                                const double& dx,
-                                dirichlet& bd);
+                                const int& n_dx,
+                                boundary_condition& bd);
 
 
 
