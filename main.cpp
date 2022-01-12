@@ -30,16 +30,13 @@
 int main(int argc, const char * argv[])
 {
     const double strike = 20;
-    const double spot = 22;
+    const double spot = 23;
 
-    //payoff::payoff_call test_payoff_call(strike);   // => A tester sur ton ordi pcq mon ça veut pas  
+    payoff::payoff_call test_payoff_call(strike);    
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
-    //std::cout << "Payoff is :" << payoff_call(spot) << std::endl;   // => idem
-
-
-
+    std::cout << "Payoff is :" << test_payoff_call(spot) << std::endl;  
 
 
 
