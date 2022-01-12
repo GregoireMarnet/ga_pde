@@ -3,6 +3,7 @@
 
 namespace solver
 {
+    
 std::vector<double> solver_mesh(payoff& payoff, 
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
@@ -39,4 +40,5 @@ std::vector<double> solver_mesh(payoff& payoff,
 
 
 };
+
 }
