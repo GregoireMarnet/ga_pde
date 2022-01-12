@@ -32,13 +32,14 @@ int main(int argc, const char * argv[])
     const double strike = 20;
     const double spot = 22;
 
-    //payoff::payoff_call test_payoff_call(strike);
+    //payoff::payoff_call test_payoff_call(strike);   // => A tester sur ton ordi pcq mon ça veut pas  
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
+    //std::cout << "Payoff is :" << payoff_call(spot) << std::endl;   // => idem
 
-    Eigen::Matrix<double,2,2> m;
-    std::cout << m;
+
+
 
 
 
