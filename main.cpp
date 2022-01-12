@@ -1,5 +1,6 @@
 #include "closed_form.hpp"
 #include "payoff.hpp"
+#include "boundary_conditions.hpp"
 #include <iostream>
 
 
@@ -32,11 +33,17 @@ int main(int argc, const char * argv[])
     const double strike = 20;
     const double spot = 23;
 
-    payoff::payoff_call test_payoff_call(strike);    
+    dauphine::payoff_call payoff_call(strike);    
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
-    std::cout << "Payoff is :" << test_payoff_call(spot) << std::endl;  
+    std::cout << "Payoff is :" << payoff_call(spot) << std::endl;  
+
+    dauphine::dirichlet bound(payoff_call,0,30);
+
+    std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
+    std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl;
+
 
     
     return 0;
