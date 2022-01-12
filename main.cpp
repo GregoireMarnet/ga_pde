@@ -24,15 +24,23 @@
 // that allows to register a function or an abstract class modeling
 // a payoff.
 
+//# include <eigen3/Eigen>
+#include "eigen-3.4.0/Eigen/Core"
+
 int main(int argc, const char * argv[])
 {
     const double strike = 20;
     const double spot = 22;
 
-    payoff::payoff_call test_payoff_call(strike);
+    //payoff::payoff_call test_payoff_call(strike);
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
+
+    Eigen::Matrix<double,2,2> m;
+    std::cout << m;
+
+
 
     
     return 0;
