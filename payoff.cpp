@@ -2,7 +2,9 @@
 #include <algorithm> //for std::max function
 
 
-namespace payoff
+
+namespace dauphine
+
 {
 payoff::payoff(){} 
 

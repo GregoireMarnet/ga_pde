@@ -6,10 +6,11 @@
 #include "eigen-3.4.0/Eigen/Core"
 
 
-namespace solver
+namespace dauphine
 {
 
-std::vector<double> solver_mesh(payoff::payoff& payoff, 
+std::vector<double> solver_mesh(dauphine::payoff& payoff, 
+
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
                                 const Eigen::MatrixXd& c,
@@ -20,7 +21,8 @@ std::vector<double> solver_mesh(payoff::payoff& payoff,
                                 const double& s_min,
                                 const double& s_max,
                                 const int& n_dx,
-                                boundary_condition& bd);
+                                dauphine::boundary& bd);
+
 
 
 
