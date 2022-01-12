@@ -2,11 +2,13 @@
 #define SOLVER_HPP
 
 #include <vector>
+#include "eigen-3.4.0/Eigen/Core"
+
 
 namespace solver
 {
 std::vector<double> solver_mesh(payoff& payoff, 
-                                const std::vector<double>& a,
+                                const Eigen::Matrix<double,2,2>& a,
                                 const std::vector<double>& b,
                                 const std::vector<double>& c,
                                 const std::vector<double>& d,
