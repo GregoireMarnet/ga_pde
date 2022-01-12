@@ -23,6 +23,7 @@
 // to call an external function between each step. Define an API
 // that allows to register a function or an abstract class modeling
 // a payoff.
+
 int main(int argc, const char * argv[])
 {
     const double strike = 20;
