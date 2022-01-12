@@ -38,8 +38,6 @@ int main(int argc, const char * argv[])
     std::cout << "Spot is : " << spot << std::endl;
     std::cout << "Payoff is :" << test_payoff_call(spot) << std::endl;  
 
-
-
     
     return 0;
 }
