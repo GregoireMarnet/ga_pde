@@ -4,7 +4,7 @@
 namespace solver
 {
     
-std::vector<double> solver_mesh(payoff& payoff, 
+std::vector<double> solver_mesh(payoff::payoff& payoff, 
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
                                 const Eigen::MatrixXd& c,
@@ -26,15 +26,15 @@ std::vector<double> solver_mesh(payoff& payoff,
     const double dt = T / n_dt;
     const double dx = (s_max - s_min) / n_dx;
 
-    const double nu1 = dt / dS^2;
-    const double nu2 = dt / dS;
+    const double nu1 = dt / dx^2;
+    const double nu2 = dt / dx;
 
     for ( int i=0 ; i < n_dx + 1 ; i++) {
 	    for ( int j=0 ; j < n_dt + 1 ; j++ {
-		    A(i,j) = theta * (a(i,j)*nu1 - (1/2) * b(i,j) * nu2) ;
-		    B(i,j) = theta * (c(i,j) * dt - 2 * a(i,j) * nu1) ;
-		    C(i,j) = theta * (a(i,j) * nu1  + (1/2) * b(i,j) * nu2) ;
-		    D(i,j) = theta * d(i,j) * dt ;
+		    A(i,j) =  (a(i,j)*nu1 - (1/2) * b(i,j) * nu2) ;
+		    B(i,j) =  (c(i,j) * dt - 2 * a(i,j) * nu1) ;
+		    C(i,j) =  (a(i,j) * nu1  + (1/2) * b(i,j) * nu2) ;
+		    D(i,j) =  d(i,j) * dt ;
 	    }
     }
 
