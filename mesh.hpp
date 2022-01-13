@@ -10,7 +10,9 @@ namespace dauphine {
 
 class mesh{
     public: 
+    
     mesh(double spot, double T, int n_dx, int n_dt, double vol);
+
     std::vector<double> get_xaxis() const;
     double get_ndx() const;
     double get_ndt() const;

@@ -14,7 +14,7 @@ namespace dauphine
 
     class solver {
         public : 
-        std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd);
+        std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd, double theta);
 
         private : 
         /*mesh& m_mesh;
@@ -22,8 +22,6 @@ namespace dauphine
         payoff& m_p;
         boundary& m_bd;*/
     };
-
-    std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd);
 
 /*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
                                 const Eigen::MatrixXd& a,
@@ -37,9 +35,6 @@ namespace dauphine
                                 const double& s_max,
                                 const int& n_dx,
                                 dauphine::boundary& bd);
-
-
-
 
 void print_solver_mesh(double rate, double maturity);
 */

@@ -4,12 +4,7 @@
 namespace dauphine
 {
 
-    std::vector<double> solver::compute_price(payoff& poff, mesh &msh, boundary& bd){
-        std::vector<double> final_cond = poff(msh.get_xaxis()) ;
-        return final_cond;
-    }
-
-    std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd){
+    std::vector<double> solver::compute_price(payoff& poff, mesh &msh, boundary& bd, double theta){
         std::vector<double> final_cond = poff(msh.get_xaxis()) ;
         return final_cond;
     }
