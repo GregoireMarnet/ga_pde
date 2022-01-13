@@ -1,6 +1,10 @@
 #include "closed_form.hpp"
 #include "payoff.hpp"
 #include "boundary_conditions.hpp"
+#include "volatility.hpp"
+#include "mesh.hpp"
+#include "solver.hpp"
+
 
 #include <iostream>
 
@@ -29,24 +33,37 @@
 //# include <eigen3/Eigen>
 #include "eigen-3.4.0/Eigen/Core"
 
+std::ostream &operator<<(std::ostream &os, const std::vector<double> &input)
+{
+    for (auto const &i: input) {
+        os << i << " ";
+    }
+    return os;
+}
+
 int main(int argc, const char * argv[])
 {
     const double strike = 20;
     const double spot = 23;
 
-    dauphine::payoff_call payoff_call(strike);    
+    dauphine::payoff_call poff_call(strike);    
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
-    std::cout << "Payoff is :" << payoff_call(spot) << std::endl;  
+    std::cout << "Payoff is :" << poff_call(spot) << std::endl;  
 
-    dauphine::dirichlet bound(payoff_call,0,30);
+    dauphine::dirichlet bound(poff_call,0,30);
 
     std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
     std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl;
 
+    const double maturity = 10;
 
+    dauphine::mesh msh(spot, maturity,3,10,0.05);
+    dauphine::solver solv;
 
-    
+    std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
+    std::cout << "final_cond: " << solv.compute_price(poff_call,msh, bound) << std::endl;
+
     return 0;
 }
