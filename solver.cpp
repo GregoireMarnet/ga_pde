@@ -3,8 +3,19 @@
 
 namespace dauphine
 {
+
+    std::vector<double> solver::compute_price(payoff& poff, mesh &msh, boundary& bd){
+        std::vector<double> final_cond = poff(msh.get_xaxis()) ;
+        return final_cond;
+    }
+
+    std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd){
+        std::vector<double> final_cond = poff(msh.get_xaxis()) ;
+        return final_cond;
+    }
+
     
-std::vector<double> solver_mesh(dauphine::payoff& payoff, 
+/*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
 
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
@@ -41,6 +52,6 @@ std::vector<double> solver_mesh(dauphine::payoff& payoff,
     }
 
 
-};
+};*/
 
 }
