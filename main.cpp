@@ -4,6 +4,7 @@
 #include "volatility.hpp"
 #include "mesh.hpp"
 #include "solver.hpp"
+#include "rate.hpp"
 
 
 #include <iostream>
@@ -60,10 +61,25 @@ int main(int argc, const char * argv[])
     const double maturity = 10;
 
     dauphine::mesh msh(spot, maturity,3,10,0.05);
-    dauphine::solver solv;
+    /*dauphine::solver solv;
 
     std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
-    std::cout << "final_cond: " << solv.compute_price(poff_call,msh, bound) << std::endl;
+    std::cout << "final_cond: " << solv.compute_price(poff_call,msh, bound) << std::endl;*/
+
+
+
+    const double r0 = 3.;
+    const double alpha = 0.1;
+
+    dauphine::rate_BS test_rate1(r0);
+    dauphine::rate_gen test_rate2(r0,msh, alpha);
+
+    std::cout << "Rate : " << test_rate1.get_rates() << "%" << std::endl;
+    std::cout << "Rate : " << test_rate2.get_rates() << std::endl;
+
+
+
+
 
     return 0;
 }
