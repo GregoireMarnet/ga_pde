@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include "mesh.hpp"
 #include "eigen-3.4.0/Eigen/Core"
 
 namespace dauphine {
@@ -20,7 +21,7 @@ class volatility{
 class vol_BS : public volatility
 {
 public:
-    volatility_BS(double sigma);
+    vol_BS(double sigma);
 };
 
 class vol_gen : public volatility

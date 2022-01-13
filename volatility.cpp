@@ -21,4 +21,8 @@ vol_gen::vol_gen(double sigma, dauphine::mesh msh,  double alpha)
         };
 }
 
+std::vector<double> volatility::get_vol() const
+{
+    return p_vol;
+}
 }

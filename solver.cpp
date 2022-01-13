@@ -1,13 +1,78 @@
 #include "solver.hpp"
+#include <math.h>
 
 
 namespace dauphine
 {
 
-    std::vector<double> solver::compute_price(payoff& poff, mesh &msh, boundary& bd, double theta){
-        std::vector<double> final_cond = poff(msh.get_xaxis()) ;
+    solver::solver(payoff& poff,
+                    mesh& msh, 
+                    boundary& bd,
+                    volatility& vol,
+                    rate& rate,
+                    double theta)
+    : m_poff(poff), m_msh(msh), m_bd(bd), m_vol(vol), m_rate(rate), m_theta(theta)
+    {};
+
+
+    void solver::init_coeff(std::vector<double>& a,
+                        std::vector<double>& b,
+                        std::vector<double>& c,
+                        std::vector<double>& d)
+    {
+    };
+
+    void solver::init_coeff(double& a, double& b, double& c, double& d)
+    {
+        a = - 0.5 * pow(m_vol.get_vol()[0],2);
+        b = 0.5 * pow(m_vol.get_vol()[0],2) - m_rate.get_rates()[0];
+        c = m_rate.get_rates()[0];
+        d = 0;
+    };
+
+    void solver::transform_coeff(std::vector<double>& a,
+                        std::vector<double>& b,
+                        std::vector<double>& c,
+                        std::vector<double>& d)
+    {
+    };
+
+    void solver::transform_coeff(double& a, double& b, double& c, double& d)
+    {
+        const double nu1 = m_msh.get_dt() / pow(m_msh.get_dx(),2);
+        const double nu2 = m_msh.get_dt() / m_msh.get_dx();
+
+        double A = a;
+        double B = b;
+        double C = c;
+        double D = d;
+
+        a = A*nu1 - 0.5 * B * nu2;
+        b = C * m_msh.get_dt() - 2 * A * nu1;
+        c = A * nu1  + 0.5 * B * nu2;
+        d = D * m_msh.get_dt();
+    };
+
+
+    std::vector<double> solver::compute_price()
+    {
+
+        if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
+        {
+            double a,b,c,d;
+            this->init_coeff(a,b,c,d);
+            this->transform_coeff(a,b,c,d);
+
+            std::cout << a << std::endl;
+
+
+
+
+        }
+
+        std::vector<double> final_cond = m_poff(m_msh.get_xaxis()) ;
         return final_cond;
-    }
+    };
 
     
 /*std::vector<double> solver_mesh(dauphine::payoff& payoff, 

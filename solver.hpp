@@ -6,6 +6,7 @@
 #include "mesh.hpp"
 #include "volatility.hpp"
 #include "boundary_conditions.hpp"
+#include "rate.hpp"
 #include "eigen-3.4.0/Eigen/Core"
 
 
@@ -14,13 +15,38 @@ namespace dauphine
 
     class solver {
         public : 
-        std::vector<double> compute_price(payoff& poff, mesh &msh, boundary& bd, double theta);
 
-        private : 
-        /*mesh& m_mesh;
-        volatility& m_v;
-        payoff& m_p;
-        boundary& m_bd;*/
+        solver(payoff& poff,
+                mesh& msh, 
+                boundary& bd,
+                volatility& vol,
+                rate& rate,
+                double theta);
+
+
+        std::vector<double> compute_price();
+
+        
+        void init_coeff(double& a, double& b, double& c, double& d);
+        void init_coeff(std::vector<double>& a,
+                        std::vector<double>& b,
+                        std::vector<double>& c,
+                        std::vector<double>& d);
+
+        void transform_coeff(double& a, double& b, double& c, double& d);
+        void transform_coeff(std::vector<double>& a,
+                        std::vector<double>& b,
+                        std::vector<double>& c,
+                        std::vector<double>& d);
+
+        private :
+            mesh& m_msh;
+            volatility& m_vol;
+            payoff& m_poff;
+            boundary& m_bd;
+            rate& m_rate;
+            double m_theta;
+
     };
 
 /*std::vector<double> solver_mesh(dauphine::payoff& payoff, 

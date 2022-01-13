@@ -2,7 +2,6 @@
 #define MESH_HPP
 
 #include <iostream>
-#include "volatility.hpp"
 #include <vector>
 
 
@@ -18,6 +17,7 @@ class mesh{
     double get_ndt() const;
     double get_xmin() const;
     double get_dx() const;
+    double get_dt() const;
     double get_T() const;
 
     private:
