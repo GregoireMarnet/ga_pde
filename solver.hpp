@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "payoff.hpp"
+#include "boundary_conditions.hpp"
 #include "eigen-3.4.0/Eigen/Core"
 
 
@@ -10,7 +11,6 @@ namespace dauphine
 {
 
 std::vector<double> solver_mesh(dauphine::payoff& payoff, 
-
                                 const Eigen::MatrixXd& a,
                                 const Eigen::MatrixXd& b,
                                 const Eigen::MatrixXd& c,
@@ -21,7 +21,7 @@ std::vector<double> solver_mesh(dauphine::payoff& payoff,
                                 const double& s_min,
                                 const double& s_max,
                                 const int& n_dx,
-                                dauphine::boundary& bd);
+                                dauphine::boundary_conditions& bd);
 
 
 
