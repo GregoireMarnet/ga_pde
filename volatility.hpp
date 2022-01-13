@@ -10,18 +10,24 @@ namespace dauphine {
 class volatility{
 
     public : 
-    //Eigen::MatrixXd get_vol();
-    //double operator() (const int&t, const int&x);
-    //std::vector<double> operator() (const int&t);
+        volatility();
+        std::vector<double> get_vol() const;
 
     protected:
-    //Eigen::MatrixXd surface;
+        std::vector<double> p_vol;
 };
 
-class constant_vol : public volatility
+class vol_BS : public volatility
 {
 public:
-    constant_vol(double sigma);
+    volatility_BS(double sigma);
+};
+
+class vol_gen : public volatility
+{
+    public:
+        vol_gen(double sigma, dauphine::mesh msh,  double alpha);
+    
 };
 
 };
