@@ -58,16 +58,22 @@ int main(int argc, const char * argv[])
     std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
     std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl;
 
-    const double maturity = 10;
+    const double maturity = 1;
+    const double r0 = 0.03;
+    const double v0 = 0.2;
 
-    dauphine::mesh msh(spot, maturity,3,10,0.05);
-    /*dauphine::solver solv;
+
+    dauphine::vol_BS vol(v0);
+    dauphine::rate_BS rate(r0);
+
+    dauphine::mesh msh(spot, maturity,3,10,v0);
+    dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
 
     std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
-    std::cout << "final_cond: " << solv.compute_price(poff_call,msh, bound) << std::endl;*/
+    std::cout << "final_cond: " << solv.compute_price() << std::endl;
 
 
-
+    /*
     const double r0 = 3.;
     const double alpha = 0.1;
 
@@ -76,7 +82,7 @@ int main(int argc, const char * argv[])
 
     std::cout << "Rate : " << test_rate1.get_rates() << "%" << std::endl;
     std::cout << "Rate : " << test_rate2.get_rates() << std::endl;
-
+*/
 
 
 

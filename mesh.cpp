@@ -38,4 +38,12 @@ namespace dauphine
         return m_T;
     }
 
+    double mesh::get_dx() const{
+        return m_dx;
+    }
+
+    double mesh::get_dt() const{
+        return m_dt;
+    }
+
 }
