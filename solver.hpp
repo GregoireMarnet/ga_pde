@@ -41,6 +41,7 @@ namespace dauphine
 
         void init_matrice_1(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
         void init_matrice_2(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
+        void fill_matrix(Eigen::MatrixXd& mesh_matrix, int t, std::vector<double> vect);
 
         private :
             mesh& m_msh;
