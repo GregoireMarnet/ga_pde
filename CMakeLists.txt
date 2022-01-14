@@ -31,6 +31,8 @@ set(PDE_SOLVER_SRCS
     volatility.cpp
     boundary_conditions.hpp
     boundary_conditions.cpp
+    rate.hpp 
+    rate.cpp
     mesh.hpp
     mesh.cpp
     main.cpp
