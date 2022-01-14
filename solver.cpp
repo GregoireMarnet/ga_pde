@@ -89,6 +89,13 @@ namespace dauphine
         
     }
 
+    void solver::fill_matrix(Eigen::MatrixXd& mesh_matrix, int t, std::vector<double> vect)
+    {
+        for (int x=0; x<mesh_matrix.rows();x++){
+            mesh_matrix(x,t) = vect[x];
+        }
+    }
+
 
     std::vector<double> solver::compute_price()
     {
@@ -107,9 +114,15 @@ namespace dauphine
             this->init_matrice_1(m_trans_1,dim,a,b,c,d);
             this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
 
-            //Eigen::MatrixXd mesh_matrix(m_msh.get_ndx(),m_msh.get_ndt());
+            const int ndx = m_msh.get_ndx();
+            const int ndt = m_msh.get_ndt();
+            Eigen::MatrixXd mesh_matrix(ndx,ndt);
             std::vector<double> final_cond = m_poff(m_msh.get_xaxis());
-            //Eigen::VectorXd v(final_cond.data());
+
+            this->fill_matrix(mesh_matrix,mesh_matrix.cols()-1,final_cond);
+            
+    
+            
 
             
 
