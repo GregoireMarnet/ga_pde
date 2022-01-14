@@ -45,7 +45,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<double> &input)
 
 int main(int argc, const char * argv[])
 {
-    /*
+    
     const double strike = 20;
     const double spot = 23;
 
@@ -68,12 +68,12 @@ int main(int argc, const char * argv[])
     dauphine::vol_BS vol(v0);
     dauphine::rate_BS rate(r0);
 
-    dauphine::mesh msh(spot, maturity,3,10,v0);
+    dauphine::mesh msh(spot, maturity,11,3,v0);
     dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
 
     std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
-    std::cout << "final_cond: " << solv.compute_price() << std::endl;
-    */
+    std::cout << "final_cond: " << std::endl << solv.compute_price() << std::endl;
+    
 
     /*
     const double r0 = 3.;
@@ -86,17 +86,6 @@ int main(int argc, const char * argv[])
     std::cout << "Rate : " << test_rate2.get_rates() << std::endl;
     */
 
-    Eigen::MatrixXd m(2,2);
-    m(0,0)=1;
-    m(1,1)=4;
-    std::vector<double> v(2);
-    v[1]=3;
-
-   
-
-
-
-    std::cout << m;
 
 
 
