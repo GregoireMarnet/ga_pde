@@ -24,7 +24,7 @@ namespace dauphine
                 double theta);
 
 
-        std::vector<double> compute_price();
+        Eigen::MatrixXd compute_price();
 
         
         void init_coeff(double& a, double& b, double& c, double& d);
