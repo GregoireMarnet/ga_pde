@@ -8,6 +8,7 @@
 
 
 #include <iostream>
+#include <vector>
 
 
 // Guidelines:
@@ -44,6 +45,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<double> &input)
 
 int main(int argc, const char * argv[])
 {
+    /*
     const double strike = 20;
     const double spot = 23;
 
@@ -71,7 +73,7 @@ int main(int argc, const char * argv[])
 
     std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
     std::cout << "final_cond: " << solv.compute_price() << std::endl;
-
+    */
 
     /*
     const double r0 = 3.;
@@ -82,8 +84,19 @@ int main(int argc, const char * argv[])
 
     std::cout << "Rate : " << test_rate1.get_rates() << "%" << std::endl;
     std::cout << "Rate : " << test_rate2.get_rates() << std::endl;
-*/
+    */
 
+    Eigen::MatrixXd m(2,2);
+    m(0,0)=1;
+    m(1,1)=4;
+    std::vector<double> v(2);
+    v[1]=3;
+
+   
+
+
+
+    std::cout << m;
 
 
 

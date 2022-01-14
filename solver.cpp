@@ -53,6 +53,42 @@ namespace dauphine
         d = D * m_msh.get_dt();
     };
 
+    void solver::init_matrice_1(Eigen::MatrixXd& m_trans,const int& dim, double a, double b, double c, double d)
+    {
+        m_trans(0,0) = b+1;
+        m_trans(0,1) = c;
+
+        for(int i=1; i<dim-1; i++){
+            m_trans(i,i-1) = a;
+            m_trans(i,i) = b+1;
+            m_trans(i,i+1) = c;
+        };
+
+        m_trans(dim-1,dim-2) = a;
+        m_trans(dim-1,dim-1) = b+1;
+        m_trans = m_trans * m_theta;
+
+        
+    }
+
+    void solver::init_matrice_2(Eigen::MatrixXd& m_trans,const int& dim, double a, double b, double c, double d)
+    {
+        m_trans(0,0) = 1-b;
+        m_trans(0,1) = -c;
+
+        for(int i=1; i<dim-1; i++){
+            m_trans(i,i-1) = -a;
+            m_trans(i,i) = 1-b;
+            m_trans(i,i+1) = -c;
+        };
+
+        m_trans(dim-1,dim-2) = -a;
+        m_trans(dim-1,dim-1) = 1-b;
+        m_trans = m_trans * (1-m_theta);
+
+        
+    }
+
 
     std::vector<double> solver::compute_price()
     {
@@ -62,6 +98,32 @@ namespace dauphine
             double a,b,c,d;
             this->init_coeff(a,b,c,d);
             this->transform_coeff(a,b,c,d);
+
+            const int dim = m_msh.get_ndx()-2;
+
+            Eigen::MatrixXd m_trans_1(dim,dim);
+            Eigen::MatrixXd m_trans_2(dim,dim);
+
+            this->init_matrice_1(m_trans_1,dim,a,b,c,d);
+            this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
+
+            //Eigen::MatrixXd mesh_matrix(m_msh.get_ndx(),m_msh.get_ndt());
+            std::vector<double> final_cond = m_poff(m_msh.get_xaxis());
+            //Eigen::VectorXd v(final_cond.data());
+
+            
+
+            
+
+
+
+
+
+            
+
+
+            
+
 
             std::cout << a << std::endl;
 

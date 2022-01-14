@@ -39,6 +39,9 @@ namespace dauphine
                         std::vector<double>& c,
                         std::vector<double>& d);
 
+        void init_matrice_1(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
+        void init_matrice_2(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
+
         private :
             mesh& m_msh;
             volatility& m_vol;
