@@ -95,6 +95,20 @@ namespace dauphine
         }
     }
 
+    std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, std::vector vect, int dx)
+    {   
+
+        std::vector<double> result(dx);
+        std::vector temp(dx-2);
+        temp = m_trans_2.dot(final_cond);
+        temp = m1_inv.dot(temp);
+        // la en gros faut rajouter les conditions initiales
+        
+
+        
+
+    }
+
 
     void solver::compute_price()
     {
@@ -111,10 +125,10 @@ namespace dauphine
 
             matrix m_trans_2(dim,dim);
 
-            this->init_matrice_1(m_trans_1,dim,a,b,c,d);  // celles la elles sont à améliorer
+            this->init_matrice_1(m_trans_1,dim,a,b,c,d); 
             this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
 
-            std::cout << m_trans_2 << std::endl;
+            //std::cout << m_trans_2 << std::endl;
             const int ndx = m_msh.get_ndx();
             const int ndt = m_msh.get_ndt();
 
@@ -124,15 +138,15 @@ namespace dauphine
 
             this->fill_matrix(mesh_matrix,mesh_matrix.nb_cols()-1,final_cond);
 
-            std::cout << mesh_matrix << std::endl;
-/*
-            Eigen::MatrixXd m1_inv = m_trans_1.inverse();
+            //std::cout << mesh_matrix << std::endl;
 
+            dauphine::matrix m1_inv = m_trans_1.inverse();
+        
 
             for (int i=m_msh.get_ndt()-2; i=0;i--){
-                Eigen::Vector3d v2(final_cond.data());
-                m_trans_2.dot(v2);
-            }*/
+
+
+            }
 
         
 
