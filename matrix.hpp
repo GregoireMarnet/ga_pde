@@ -1,0 +1,48 @@
+#ifndef MATRIX_H
+#define MATRIX_H
+#include <string>
+#include <vector>
+
+#include <ostream>
+
+namespace dauphine {
+class matrix
+    {
+    public:
+        
+        matrix(std::size_t nb_rows, std::size_t nb_cols);
+        matrix(const matrix&);
+        //matrix(std::vector<double>);
+        std::size_t nb_rows() const;
+        std::size_t nb_cols() const;
+        void resize(std::size_t nb_rows, std::size_t nb_cols);
+        double& operator()(std::size_t i, std::size_t j);
+        const double& operator()(std::size_t i, std::size_t j) const;
+
+        matrix& operator+=(const matrix& rhs);
+        matrix& operator-=(const matrix& rhs);
+        matrix& operator*=(const matrix& rhs);
+        matrix& operator/=(const matrix& rhs);
+        //matrix& operator=(const matrix& rhs);
+
+        matrix& operator+=(double rhs);
+        matrix& operator-=(double rhs);
+        matrix& operator*=(double rhs);
+        matrix& operator/=(double rhs);
+
+        
+
+    private:
+
+        std::size_t m_nb_rows;
+        std::size_t m_nb_cols;
+        std::vector<double> m_data;
+    };
+
+    std::ostream& operator<<(std::ostream& out, const matrix& m);
+
+    matrix operator+(const matrix& lhs, const matrix& rhs);
+    matrix operator+(const matrix& lhs, double rhs);
+    matrix operator+(double lhs, const matrix& rhs);
+}
+#endif // MATRIX_H

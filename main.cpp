@@ -5,10 +5,12 @@
 #include "mesh.hpp"
 #include "solver.hpp"
 #include "rate.hpp"
+#include "matrix.hpp"
 
 
 #include <iostream>
 #include <vector>
+//#include "eigen-3.4.0/Eigen/Core"
 
 
 // Guidelines:
@@ -32,15 +34,17 @@
 // that allows to register a function or an abstract class modeling
 // a payoff.
 
-//# include <eigen3/Eigen>
-#include "eigen-3.4.0/Eigen/Core"
 
-std::ostream &operator<<(std::ostream &os, const std::vector<double> &input)
+
+std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
 {
-    for (auto const &i: input) {
-        os << i << " ";
-    }
-    return os;
+    for(std::size_t i = 0; i < input.size(); ++i)
+        {
+                out << input[i] << " ";
+        }
+        out << std::endl;
+        return out;
+    return out;
 }
 
 int main(int argc, const char * argv[])
@@ -67,27 +71,10 @@ int main(int argc, const char * argv[])
 
     dauphine::vol_BS vol(v0);
     dauphine::rate_BS rate(r0);
-
     dauphine::mesh msh(spot, maturity,11,3,v0);
+
     dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
-
-    std::cout << "xaxis : " << msh.get_xaxis() << std::endl;
-    std::cout << "final_cond: " << std::endl << solv.compute_price() << std::endl;
-    
-
-    /*
-    const double r0 = 3.;
-    const double alpha = 0.1;
-
-    dauphine::rate_BS test_rate1(r0);
-    dauphine::rate_gen test_rate2(r0,msh, alpha);
-
-    std::cout << "Rate : " << test_rate1.get_rates() << "%" << std::endl;
-    std::cout << "Rate : " << test_rate2.get_rates() << std::endl;
-    */
-
-
-
+    solv.compute_price();
 
     return 0;
 }

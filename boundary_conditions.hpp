@@ -21,7 +21,6 @@ class boundary
 
 class dirichlet : public boundary
 {
-    
     public:
         dirichlet(dauphine::payoff& payoff, double s_min, double s_max);
     

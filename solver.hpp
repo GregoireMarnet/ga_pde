@@ -1,13 +1,13 @@
 #ifndef SOLVER_HPP
 #define SOLVER_HPP
 
-#include <vector>
 #include "payoff.hpp"
 #include "mesh.hpp"
 #include "volatility.hpp"
 #include "boundary_conditions.hpp"
 #include "rate.hpp"
-#include "eigen-3.4.0/Eigen/Core"
+#include "matrix.hpp"
+#include <vector>
 
 
 namespace dauphine
@@ -23,10 +23,8 @@ namespace dauphine
                 rate& rate,
                 double theta);
 
+        void compute_price();
 
-        Eigen::MatrixXd compute_price();
-
-        
         void init_coeff(double& a, double& b, double& c, double& d);
         void init_coeff(std::vector<double>& a,
                         std::vector<double>& b,
@@ -39,9 +37,9 @@ namespace dauphine
                         std::vector<double>& c,
                         std::vector<double>& d);
 
-        void init_matrice_1(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
-        void init_matrice_2(Eigen::MatrixXd& m_trans, const int& dim, double a, double b, double c, double d);
-        void fill_matrix(Eigen::MatrixXd& mesh_matrix, int t, std::vector<double> vect);
+        void init_matrice_1(matrix& m_trans, const int& dim, double a, double b, double c, double d);
+        void init_matrice_2(matrix& m_trans, const int& dim, double a, double b, double c, double d);
+        void fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect);
 
         private :
             mesh& m_msh;
