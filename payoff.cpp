@@ -2,8 +2,6 @@
 #include <algorithm> //for std::max function
 #include <math.h>
 
-
-
 namespace dauphine
 
 {
