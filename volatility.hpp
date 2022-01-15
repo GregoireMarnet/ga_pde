@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "mesh.hpp"
-#include "eigen-3.4.0/Eigen/Core"
+
 
 namespace dauphine {
 

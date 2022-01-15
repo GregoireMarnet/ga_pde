@@ -10,7 +10,7 @@ namespace dauphine
         m_xmin=std::max(log(spot)-5*std,0.);
         m_xmax=2*log(spot)-m_xmin;
         m_dx=(m_xmax-m_xmin)/double(n_dx-1);
-        m_dt=T/double(n_dt);
+        m_dt=T/double(n_dt-1);
 
         m_xaxis.resize(n_dx);
         for(int i=0; i<n_dx; i++){

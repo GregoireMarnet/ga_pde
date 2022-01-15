@@ -1,7 +1,6 @@
 #include "solver.hpp"
 #include <math.h>
 
-
 namespace dauphine
 {
 
@@ -53,7 +52,7 @@ namespace dauphine
         d = D * m_msh.get_dt();
     };
 
-    void solver::init_matrice_1(Eigen::MatrixXd& m_trans,const int& dim, double a, double b, double c, double d)
+    void solver::init_matrice_1(matrix& m_trans,const int& dim, double a, double b, double c, double d)
     {
         m_trans(0,0) = b+1;
         m_trans(0,1) = c;
@@ -66,12 +65,12 @@ namespace dauphine
 
         m_trans(dim-1,dim-2) = a;
         m_trans(dim-1,dim-1) = b+1;
-        m_trans = m_trans * m_theta;
+        m_trans *= m_theta;
 
         
     }
 
-    void solver::init_matrice_2(Eigen::MatrixXd& m_trans,const int& dim, double a, double b, double c, double d)
+    void solver::init_matrice_2(matrix& m_trans,const int& dim, double a, double b, double c, double d)
     {
         m_trans(0,0) = 1-b;
         m_trans(0,1) = -c;
@@ -84,20 +83,20 @@ namespace dauphine
 
         m_trans(dim-1,dim-2) = -a;
         m_trans(dim-1,dim-1) = 1-b;
-        m_trans = m_trans * (1-m_theta);
+        m_trans *= (1-m_theta);
 
         
     }
 
-    void solver::fill_matrix(Eigen::MatrixXd& mesh_matrix, int t, std::vector<double> vect)
+    void solver::fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect)
     {
-        for (int x=0; x<mesh_matrix.rows();x++){
-            mesh_matrix(x,t) = vect[mesh_matrix.rows()-x-1];
+        for (int x=0; x<mesh_matrix.nb_rows();x++){
+            mesh_matrix(x,t) = vect[mesh_matrix.nb_rows()-x-1];
         }
     }
 
 
-    Eigen::MatrixXd solver::compute_price()
+    void solver::compute_price()
     {
 
         if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
@@ -108,36 +107,34 @@ namespace dauphine
 
             const int dim = m_msh.get_ndx()-2;
 
-            Eigen::MatrixXd m_trans_1(dim,dim);
-            Eigen::MatrixXd m_trans_2(dim,dim);
+            matrix m_trans_1(dim,dim);
 
+            matrix m_trans_2(dim,dim);
 
             this->init_matrice_1(m_trans_1,dim,a,b,c,d);  // celles la elles sont à améliorer
             this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
-            
+
+            std::cout << m_trans_2 << std::endl;
             const int ndx = m_msh.get_ndx();
             const int ndt = m_msh.get_ndt();
-            Eigen::MatrixXd mesh_matrix(ndx,ndt);
+
+            matrix mesh_matrix(ndx,ndt);
+        
             std::vector<double> final_cond = m_poff(m_msh.get_xaxis());
 
-            this->fill_matrix(mesh_matrix,mesh_matrix.cols()-1,final_cond);
-            
+            this->fill_matrix(mesh_matrix,mesh_matrix.nb_cols()-1,final_cond);
+
             std::cout << mesh_matrix << std::endl;
-
-            
-    
-            
-
-            
-
-            
+/*
+            Eigen::MatrixXd m1_inv = m_trans_1.inverse();
 
 
+            for (int i=m_msh.get_ndt()-2; i=0;i--){
+                Eigen::Vector3d v2(final_cond.data());
+                m_trans_2.dot(v2);
+            }*/
 
-
-
-            
-
+        
 
             
 
@@ -150,8 +147,6 @@ namespace dauphine
         }
 
         std::vector<double> final_cond = m_poff(m_msh.get_xaxis()) ;
-        Eigen::MatrixXd m(1,1);
-        return m; // j'arrive pas à retourner mesh_matrix
     };
 
     
