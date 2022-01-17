@@ -172,3 +172,42 @@ std::vector<double> operator-(const std::vector<double>& lhs, const double& scal
     std::transform(vect.begin(),vect.end(),vect.begin(),[scal](double f)-> double {return f-scal;});
     return vect;
 }
+
+std::vector<double> operator+(const std::vector<double>& lhs, const std::vector<double>& rhs)
+{
+    std::vector<double> vect = lhs;
+    if (lhs.size()==1){
+        return lhs[0] + rhs;
+    }
+    else if (rhs.size()==1){
+        return lhs + rhs[0];
+    }
+    else if (lhs.size()==rhs.size()){
+        std::transform(vect.begin(),vect.end(),rhs.begin(),vect.begin(), std::plus<double>());
+        return vect;
+    }
+    else
+    {
+        throw std::invalid_argument( "Non matching vector sizes");
+    }
+
+
+}
+std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs)
+{
+    std::vector<double> vect = lhs;
+    if (lhs.size()==1){
+        return lhs[0] - rhs;
+    }
+    else if (rhs.size()==1){
+        return lhs - rhs[0];
+    }
+    else if (lhs.size()==rhs.size()){
+        std::transform(vect.begin(),vect.end(),rhs.begin(),vect.begin(), std::minus<double>());
+        return vect;
+    }
+    else
+    {
+        throw std::invalid_argument( "Non matching vector sizes");
+    }
+}
