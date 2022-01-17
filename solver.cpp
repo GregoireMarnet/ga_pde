@@ -207,20 +207,23 @@ namespace dauphine
 
             std::copy(final_poff.begin()+1,final_poff.end()-1,final_vect.begin()); // extract only the core part in final_vect
 
-            //std::cout << mesh_matrix << std::endl;
+            
 
-            dauphine::matrix m1_inv = m_trans_1.inverse();
-
-            std::vector<double> vect(ndx-2);
+            std::vector<double> vect(ndx-2); // ATTENTION AU COEFF D
             vect[0] = -2 * ( m_bd.get_lower_b() * a + d);
             vect[ndx-3] = -2 * (m_bd.get_upper_b()* a + d);
 
-            for (int i=m_msh.get_ndt()-2; i=0;i--){
 
-                final_vect = this->solve_system(m1_inv,m_trans_2,final_vect,vect,ndx);
+            for (int i=m_msh.get_ndt()-2; i=0;i--){
+                
+                final_vect = m_trans_2 * final_vect; 
+                final_vect = final_vect + vect;
+                final_vect = this->solve_tridiag(m_trans_1,final_vect);
                 std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
                 this->fill_matrix(mesh_matrix,i,final_poff);
             };
+
+            std::cout << mesh_matrix << std::endl;
 
         
            
