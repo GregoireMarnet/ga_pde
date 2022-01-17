@@ -48,6 +48,21 @@ class matrix
     matrix operator+(const matrix& lhs, const matrix& rhs);
     matrix operator+(const matrix& lhs, double rhs);
     matrix operator+(double lhs, const matrix& rhs);
+
     std::vector<double> operator*(const matrix& lhs, const std::vector<double>& rhs);
+
 }
+
+std::vector<double> operator*(const double& scal, const std::vector<double>& rhs);
+std::vector<double> operator*(const std::vector<double>& lhs, const double& scal);
+
+std::vector<double> operator+(const double& scal, const std::vector<double>& rhs);
+std::vector<double> operator+(const std::vector<double>& lhs, const double& scal);
+
+std::vector<double> operator-(const double& scal, const std::vector<double>& rhs);
+std::vector<double> operator-(const std::vector<double>& lhs, const double& scal);
+
+std::vector<double> operator+(const std::vector<double>& lhs, const std::vector<double>& rhs);
+std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs);
+
 #endif // MATRIX_H

@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <math.h> 
 //#include "eigen-3.4.0/Eigen/Core"
 
 
@@ -49,7 +51,7 @@
 
 int main(int argc, const char * argv[])
 {
-    
+    /*
     const double strike = 20;
     const double spot = 23;
 
@@ -76,5 +78,15 @@ int main(int argc, const char * argv[])
     dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
     solv.compute_price();
 
+    */
+
+
+    std::vector<double> vect = {1,2,3,4,5};
+    std::vector<double> vect2 = {2,2,3,4,5};
+    //std::copy(vect2.begin(),vect2.end(),vect.begin()+1);
+
+    //std::transform(vect.begin(),vect.end(),vect.begin(),[](double f)-> double {return f*f;});
+
+    std::cout << vect - vect2;
     return 0;
 }

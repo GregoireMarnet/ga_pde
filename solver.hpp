@@ -40,9 +40,15 @@ namespace dauphine
         void init_matrice_1(matrix& m_trans, const int& dim, double a, double b, double c, double d);
         void init_matrice_2(matrix& m_trans, const int& dim, double a, double b, double c, double d);
         void fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect);
+
         std::vector<double> solve_tridiag(const matrix& mat, std::vector<double>& d);
-        //std::vector<double> solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, std::vector vect);
+
         
+        /*std::vector<double> solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
+                                        std::vector<double> final_vect,
+                                        std::vector<double> vect, int ndx);
+
+        */
 
         private :
             mesh& m_msh;
