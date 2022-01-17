@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <ostream>
+#include <iostream>
 
 namespace dauphine {
 class matrix
@@ -18,12 +19,15 @@ class matrix
         void resize(std::size_t nb_rows, std::size_t nb_cols);
         double& operator()(std::size_t i, std::size_t j);
         const double& operator()(std::size_t i, std::size_t j) const;
+        
 
         matrix& operator+=(const matrix& rhs);
         matrix& operator-=(const matrix& rhs);
         matrix& operator*=(const matrix& rhs);
         matrix& operator/=(const matrix& rhs);
         //matrix& operator=(const matrix& rhs);
+        matrix& operator*=(const std::vector<double>& rhs);
+        
 
         matrix& operator+=(double rhs);
         matrix& operator-=(double rhs);
@@ -45,6 +49,7 @@ class matrix
     matrix operator+(const matrix& lhs, double rhs);
     matrix operator+(double lhs, const matrix& rhs);
 
+    std::vector<double> operator*(const matrix& lhs, const std::vector<double>& rhs);
 
 }
 

@@ -2,8 +2,21 @@
 #include <math.h>
 #include <algorithm>
 
+
+
 namespace dauphine
 {
+
+    std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
+    {
+        for(std::size_t i = 0; i < input.size(); ++i)
+            {
+                    out << input[i] << " ";
+            }
+            out << std::endl;
+            return out;
+        return out;
+    }
 
     solver::solver(payoff& poff,
                     mesh& msh, 
@@ -101,6 +114,53 @@ namespace dauphine
             mesh_matrix(x,t) = vect[mesh_matrix.nb_rows()-x-1];
         }
     }
+
+
+    std::vector<double> solver::solve_tridiag(const matrix& mat, std::vector<double>& d){
+
+        if(mat.nb_cols()!=mat.nb_rows()){
+            throw std::domain_error("Not square matrix" );
+        }
+
+        if(mat.nb_cols()!=d.size()){
+            throw std::domain_error("b of wrong size when solving Ax=b" );
+        }
+        
+        std::size_t n = mat.nb_cols();
+        std::vector<double> a(n-1);
+        std::vector<double> b(n);
+        std::vector<double> c(n-1);
+
+        for(std::size_t i=0; i<n; i++){
+            for( std::size_t j=i; j<n;j++){
+                if(j==i+1){
+                    c[i]=mat(i,j);
+                }
+                else if(j==i-1){
+                    a[i]=mat(i,i-1);
+                }
+                else if (j==i){
+                    b[i]=mat(i,j);
+                }
+            }
+        }
+
+        std::vector<double> x(n);
+    
+        for(int i=1; i<n; i++){
+            
+            double w = a[i-1]/b[i-1];
+            b[i] -= w*c[i-1];
+            d[i] -= w*d[i-1];
+        }
+        x[n-1] = d[n-1]/b[n-1];
+        for(int i=n-2; i >= 0; i--)
+            x[i] = (d[i]- c[i]*x[i+1])/b[i];
+
+		return x;
+    }
+
+
 /*
     std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
                                             std::vector<double> final_vect,
@@ -114,7 +174,7 @@ namespace dauphine
 
         return result;
 
-    }
+    }*/
 
 
     void solver::compute_price()
@@ -135,7 +195,6 @@ namespace dauphine
             this->init_matrice_1(m_trans_1,dim,a,b,c,d); 
             this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
 
-            //std::cout << m_trans_2 << std::endl;
             const int ndx = m_msh.get_ndx();
             const int ndt = m_msh.get_ndt();
 
@@ -172,8 +231,6 @@ namespace dauphine
 
 
         
-
-
 
 
         }

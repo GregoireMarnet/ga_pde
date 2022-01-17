@@ -38,7 +38,7 @@
 
 
 
-std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
+/*std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
 {
     for(std::size_t i = 0; i < input.size(); ++i)
         {
@@ -47,7 +47,7 @@ std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
         out << std::endl;
         return out;
     return out;
-}
+}*/
 
 int main(int argc, const char * argv[])
 {
