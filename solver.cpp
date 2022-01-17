@@ -20,6 +20,12 @@ namespace dauphine
                         std::vector<double>& c,
                         std::vector<double>& d)
     {
+        /*std::vector<double> var = m_vol.get_vol();
+        std::transform(var.begin(),var.end(),var.begin(),[](double f)-> double {return f*f;});
+        a = - 0.5 * var;
+        b = 0.5 * var - m_rate.get_rates();
+        c = m_rate.get_rates();
+        d = 0;*/
     };
 
     void solver::init_coeff(double& a, double& b, double& c, double& d)
@@ -95,7 +101,7 @@ namespace dauphine
             mesh_matrix(x,t) = vect[mesh_matrix.nb_rows()-x-1];
         }
     }
-
+/*
     std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
                                             std::vector<double> final_vect,
                                             std::vector<double> vect, int ndx)
@@ -158,7 +164,7 @@ namespace dauphine
             };
 
         
-            
+           
 
         
 
@@ -172,10 +178,11 @@ namespace dauphine
 
         }
 
-        std::vector<double> final_cond = m_poff(m_msh.get_xaxis()) ;
+        
     };
 
-    
+*/
+
 /*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
 
                                 const Eigen::MatrixXd& a,
