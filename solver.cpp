@@ -155,8 +155,6 @@ namespace dauphine
                 final_vect = this->solve_system(m1_inv,m_trans_2,final_vect,vect,ndx);
                 std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
                 this->fill_matrix(mesh_matrix,i,final_poff);
-
-
             }
             
 
