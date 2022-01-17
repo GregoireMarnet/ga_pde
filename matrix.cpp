@@ -133,6 +133,42 @@ namespace dauphine {
 
 
 
-    
 
+
+}
+
+std::vector<double> operator*(const double& scal, const std::vector<double>& rhs)
+    {
+        std::vector<double> vect = rhs;
+        std::transform(vect.begin(),vect.end(),vect.begin(),[scal](double f)-> double {return f*scal;});
+        return vect;
+
+    }
+std::vector<double> operator*(const std::vector<double>& lhs, const double& scal)
+{
+    return scal*lhs;
+}
+
+std::vector<double> operator+(const double& scal, const std::vector<double>& rhs)
+{
+    std::vector<double> vect = rhs;
+    std::transform(vect.begin(),vect.end(),vect.begin(),[scal](double f)-> double {return f+scal;});
+    return vect;
+}
+std::vector<double> operator+(const std::vector<double>& lhs, const double& scal)
+{
+    return scal+lhs;
+}
+
+std::vector<double> operator-(const double& scal, const std::vector<double>& rhs)
+{
+    std::vector<double> vect = rhs;
+    std::transform(vect.begin(),vect.end(),vect.begin(),[scal](double f)-> double {return scal-f;});
+    return vect;
+}
+std::vector<double> operator-(const std::vector<double>& lhs, const double& scal)
+{
+    std::vector<double> vect = lhs;
+    std::transform(vect.begin(),vect.end(),vect.begin(),[scal](double f)-> double {return f-scal;});
+    return vect;
 }
