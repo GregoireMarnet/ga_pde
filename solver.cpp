@@ -213,12 +213,20 @@ namespace dauphine
             vect[0] = -2 * ( m_bd.get_lower_b() * a + d);
             vect[ndx-3] = -2 * (m_bd.get_upper_b()* a + d);
 
+            std::vector<double> test(ndx-2);
 
-            for (int i=m_msh.get_ndt()-2; i=0;i--){
+            final_vect = m_trans_2 * final_vect;
+            test = final_vect + vect;
+
+            std::cout << m_msh.get_ndt() << std::endl;
+
+            for (int i=(m_msh.get_ndt()-2); i>=0;i--){
+
+                final_vect = m_trans_2 * final_vect;
                 
-                final_vect = m_trans_2 * final_vect; 
-                final_vect = final_vect + vect;
-                final_vect = this->solve_tridiag(m_trans_1,final_vect);
+
+                test = final_vect + vect;
+                final_vect = this->solve_tridiag(m_trans_1,test);
                 std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
                 this->fill_matrix(mesh_matrix,i,final_poff);
             };
@@ -241,7 +249,7 @@ namespace dauphine
         
     };
 
-*/
+
 
 /*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
 

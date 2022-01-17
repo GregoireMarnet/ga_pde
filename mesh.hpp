@@ -16,6 +16,7 @@ class mesh{
     double get_ndx() const;
     double get_ndt() const;
     double get_xmin() const;
+    double get_xmax() const;
     double get_dx() const;
     double get_dt() const;
     double get_T() const;

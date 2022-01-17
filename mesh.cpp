@@ -30,8 +30,12 @@ namespace dauphine
         return m_ndt;
     }
 
-     double mesh::get_xmin() const{
+    double mesh::get_xmin() const{
         return m_xmin;
+    }
+
+    double mesh::get_xmax() const{
+        return m_xmax;
     }
 
     double mesh::get_T() const{

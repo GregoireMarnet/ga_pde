@@ -38,7 +38,7 @@
 
 
 
-/*std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
+std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
 {
     for(std::size_t i = 0; i < input.size(); ++i)
         {
@@ -47,46 +47,44 @@
         out << std::endl;
         return out;
     return out;
-}*/
+}
 
 int main(int argc, const char * argv[])
 {
-    /*
-    const double strike = 20;
-    const double spot = 23;
+    
+    const double strike = 100;
+    const double spot = 100;
+    const double maturity = 1;
+    const double r0 = 0.05;
+    const double v0 = 0.1;
+    const int ndx = 5;
+    const int ndt = 5;
+    const int theta = 0.5;
 
-    dauphine::payoff_call poff_call(strike);    
+
+    dauphine::vol_BS vol(v0);
+    dauphine::rate_BS rate(r0);
+    dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
+    dauphine::payoff_call poff_call(strike); 
+    dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
+
+       
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
     std::cout << "Payoff is :" << poff_call(spot) << std::endl;  
 
-    dauphine::dirichlet bound(poff_call,0,30);
-
     std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
     std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl;
 
-    const double maturity = 1;
-    const double r0 = 0.03;
-    const double v0 = 0.2;
 
 
-    dauphine::vol_BS vol(v0);
-    dauphine::rate_BS rate(r0);
-    dauphine::mesh msh(spot, maturity,11,3,v0);
 
-    dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
+
+
+    dauphine::solver solv(poff_call,msh, bound,vol, rate, theta);
     solv.compute_price();
 
-    */
-
-
-    std::vector<double> vect = {1,2,3,4,5};
-    std::vector<double> vect2 = {2,2,3,4,5};
-    //std::copy(vect2.begin(),vect2.end(),vect.begin()+1);
-
-    //std::transform(vect.begin(),vect.end(),vect.begin(),[](double f)-> double {return f*f;});
-
-    std::cout << vect - vect2;
+    
     return 0;
 }
