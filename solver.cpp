@@ -1,5 +1,6 @@
 #include "solver.hpp"
 #include <math.h>
+#include <algorithm>
 
 namespace dauphine
 {
@@ -95,17 +96,17 @@ namespace dauphine
         }
     }
 
-    std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, std::vector vect, int dx)
+    std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
+                                            std::vector<double> final_vect,
+                                            std::vector<double> vect, int ndx)
     {   
 
-        std::vector<double> result(dx);
-        std::vector temp(dx-2);
-        temp = m_trans_2.dot(final_cond);
-        temp = m1_inv.dot(temp);
-        // la en gros faut rajouter les conditions initiales
-        
+        std::vector<double> result(ndx-2);
+        result = m_trans_2 * final_vect; 
+        result = result + vect;
+        result = m1_inv * result;
 
-        
+        return result;
 
     }
 
@@ -134,19 +135,30 @@ namespace dauphine
 
             matrix mesh_matrix(ndx,ndt);
         
-            std::vector<double> final_cond = m_poff(m_msh.get_xaxis());
+            std::vector<double> final_poff = m_poff(m_msh.get_xaxis());
+            std::vector<double> final_vect(ndx-2);
 
-            this->fill_matrix(mesh_matrix,mesh_matrix.nb_cols()-1,final_cond);
+            this->fill_matrix(mesh_matrix,mesh_matrix.nb_cols()-1,final_poff); //Compute complete final cond
+
+            std::copy(final_poff.begin()+1,final_poff.end()-1,final_vect.begin()); // extract only the core part in final_vect
 
             //std::cout << mesh_matrix << std::endl;
 
             dauphine::matrix m1_inv = m_trans_1.inverse();
-        
+
+            std::vector<double> vect(ndx-2);
+            vect[0] = -2 * ( m_bd.get_lower_b() * a + d);
+            vect[ndx-3] = -2 * (m_bd.get_upper_b()* a + d);
 
             for (int i=m_msh.get_ndt()-2; i=0;i--){
 
+                final_vect = this->solve_system(m1_inv,m_trans_2,final_vect,vect,ndx);
+                std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
+                this->fill_matrix(mesh_matrix,i,final_poff);
+
 
             }
+            
 
         
 

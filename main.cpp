@@ -49,7 +49,7 @@ std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
 
 int main(int argc, const char * argv[])
 {
-    
+    /*
     const double strike = 20;
     const double spot = 23;
 
@@ -75,6 +75,14 @@ int main(int argc, const char * argv[])
 
     dauphine::solver solv(poff_call,msh, bound,vol, rate, 0.5);
     solv.compute_price();
+
+    */
+    #include <algorithm>
+
+    std::vector<double> vect = {1,2,3,4,5};
+    std::vector<double> vect2 = {4,5};
+    std::copy(vect2.begin(),vect2.end(),vect.begin()+1);
+    std::cout << vect;
 
     return 0;
 }
