@@ -1,5 +1,6 @@
 #include "matrix.hpp"
 #include <math.h>
+#include <string>
 
 namespace dauphine {
 
@@ -33,7 +34,24 @@ namespace dauphine {
         return rhs + lhs;
     }
 
-    
+    std::vector<double> operator*(const matrix& lhs, const std::vector<double>& rhs)
+    {
+        std::vector<double> tmp(lhs.nb_rows());
+
+        if(lhs.nb_cols()!=rhs.size()){
+            throw std::domain_error("Wrong vector dimension for multiplication" );
+        }
+        else{
+            for(std::size_t i=0; i<lhs.nb_rows(); i++){
+                double temp = 0 ;
+                for(std::size_t  j=0;j<lhs.nb_cols(); j++){
+                    temp = temp + lhs(i,j)*rhs[j];
+                }
+                tmp[i]=temp;
+            }
+        }
+        return tmp;
+    }
 
     matrix::matrix(std::size_t nb_rows, std::size_t nb_cols)
         : m_nb_rows(nb_rows),
@@ -130,9 +148,5 @@ namespace dauphine {
                        [rhs](double arg) { return arg / rhs; });
         return *this;
     }
-
-
-
-    
 
 }
