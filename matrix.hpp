@@ -57,4 +57,7 @@ std::vector<double> operator+(const std::vector<double>& lhs, const double& scal
 std::vector<double> operator-(const double& scal, const std::vector<double>& rhs);
 std::vector<double> operator-(const std::vector<double>& lhs, const double& scal);
 
+std::vector<double> operator+(const std::vector<double>& lhs, const std::vector<double>& rhs);
+std::vector<double> operator-(const std::vector<double>& lhs, const std::vector<double>& rhs);
+
 #endif // MATRIX_H
