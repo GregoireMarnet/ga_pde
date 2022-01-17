@@ -82,12 +82,11 @@ int main(int argc, const char * argv[])
 
 
     std::vector<double> vect = {1,2,3,4,5};
-    std::vector<double> vect2 = {4};
-    std::copy(vect2.begin(),vect2.end(),vect.begin()+1);
+    std::vector<double> vect2 = {8,9};
+    //std::copy(vect2.begin(),vect2.end(),vect.begin()+1);
 
     //std::transform(vect.begin(),vect.end(),vect.begin(),[](double f)-> double {return f*f;});
 
-    std::cout << vect-vect2;
-
+    std::cout << vect;
     return 0;
 }
