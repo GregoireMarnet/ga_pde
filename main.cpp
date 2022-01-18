@@ -57,8 +57,8 @@ int main(int argc, const char * argv[])
     const double maturity = 0.5;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 15;
-    const int ndt = 15;
+    const int ndx = 11;
+    const int ndt = 1500;
     const double theta = 0.5;
 
     
@@ -67,6 +67,7 @@ int main(int argc, const char * argv[])
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
+
 
     dauphine::solver solv(poff_call,msh, bound,vol, rate, theta);
     
