@@ -60,6 +60,7 @@ namespace dauphine
     {
         const double nu1 = m_msh.get_dt() / pow(m_msh.get_dx(),2);
         const double nu2 = m_msh.get_dt() / m_msh.get_dx();
+        std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
 
         double A = a;
         double B = b;
@@ -74,36 +75,34 @@ namespace dauphine
 
     void solver::init_matrice_1(matrix& m_trans,const int& dim, double a, double b, double c, double d)
     {
-        m_trans(0,0) = b+1;
-        m_trans(0,1) = c;
+        m_trans(0,0) = m_theta*b+1;
+        m_trans(0,1) = m_theta*c;
 
         for(int i=1; i<dim-1; i++){
-            m_trans(i,i-1) = a;
-            m_trans(i,i) = b+1;
-            m_trans(i,i+1) = c;
+            m_trans(i,i-1) = m_theta*a;
+            m_trans(i,i) = m_theta*b+1;
+            m_trans(i,i+1) = m_theta*c;
         };
 
-        m_trans(dim-1,dim-2) = a;
-        m_trans(dim-1,dim-1) = b+1;
-        m_trans *= m_theta;
+        m_trans(dim-1,dim-2) = m_theta*a;
+        m_trans(dim-1,dim-1) = m_theta*b+1;
 
         
     }
 
     void solver::init_matrice_2(matrix& m_trans,const int& dim, double a, double b, double c, double d)
     {
-        m_trans(0,0) = 1-b;
-        m_trans(0,1) = -c;
+        m_trans(0,0) = 1-(1-m_theta)*b;
+        m_trans(0,1) = -(1-m_theta)*c;
 
         for(int i=1; i<dim-1; i++){
-            m_trans(i,i-1) = -a;
-            m_trans(i,i) = 1-b;
-            m_trans(i,i+1) = -c;
+            m_trans(i,i-1) = -(1-m_theta)*a;
+            m_trans(i,i) = 1-(1-m_theta)*b;
+            m_trans(i,i+1) = -(1-m_theta)*c;
         };
 
-        m_trans(dim-1,dim-2) = -a;
-        m_trans(dim-1,dim-1) = 1-b;
-        m_trans *= (1-m_theta);
+        m_trans(dim-1,dim-2) = -(1-m_theta)*a;
+        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b;
 
         
     }
@@ -183,8 +182,11 @@ namespace dauphine
         if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
         {
             double a,b,c,d;
+            std::cout << "coeff b : " << std::endl << b << std::endl;
             this->init_coeff(a,b,c,d);
+            std::cout << "coeff b : " << std::endl << b << std::endl;
             this->transform_coeff(a,b,c,d);
+            std::cout << "coeff b : " << std::endl << b << std::endl;
 
             const int dim = m_msh.get_ndx()-2;
 
@@ -210,8 +212,8 @@ namespace dauphine
             //std::cout << std::endl << "Mesh à l'initialisation : " << std::endl << mesh_matrix << std::endl;
 
             std::vector<double> vect(ndx-2); // ATTENTION AU COEFF D
-            vect[0] = -2 * ( m_bd.get_lower_b() * a + d);
-            vect[ndx-3] = -2 * (m_bd.get_upper_b()* a + d);
+            vect[0] = -m_bd.get_lower_b() * a + d;
+            vect[ndx-3] = - m_bd.get_upper_b()* a + d;
 
             //std::cout << std::endl << "Matrice Trans  1 : " << std::endl << m_trans_1 << std::endl;
 
@@ -227,7 +229,7 @@ namespace dauphine
                 this->fill_matrix(mesh_matrix,i,final_poff);
             };
 
-            std::cout << mesh_matrix << std::endl;
+            //std::cout << mesh_matrix << std::endl;
             std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
         
            
