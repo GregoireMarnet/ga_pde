@@ -14,10 +14,10 @@ payoff_call::payoff_call(const double& strike)
 
 double payoff_call::operator() (const double& spot) const
 {
-    return std::max(spot - p_strike, 0.0);
+    return std::max(exp(spot) - p_strike, 0.0);
 }
 
-std::vector<double> payoff_call::operator() ( const std::vector<double>& spot) const
+std::vector<double> payoff_call::operator() (const std::vector<double>& spot) const
 {
     std::vector<double> payout(spot.size());
     for( int i=0; i<spot.size();i++){
