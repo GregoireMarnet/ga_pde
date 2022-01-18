@@ -54,11 +54,11 @@ int main(int argc, const char * argv[])
     
     const double strike = 100;
     const double spot = 100;
-    const double maturity = 0.5;
+    const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 11;
-    const int ndt = 1500;
+    const int ndx = 101;
+    const int ndt = 151;
     const double theta = 0.5;
 
     
@@ -74,6 +74,7 @@ int main(int argc, const char * argv[])
     std::cout << solv << std::endl;
     solv.compute_price();
 
+    double bs_price( spot,  strike,  v0,  maturity, True);
     
     return 0;
 }
