@@ -20,8 +20,8 @@ class volatility{
 
 class vol_BS : public volatility
 {
-public:
-    vol_BS(double sigma);
+    public:
+        vol_BS(double sigma);
 };
 
 class vol_gen : public volatility

@@ -6,6 +6,7 @@
 #include "solver.hpp"
 #include "rate.hpp"
 #include "matrix.hpp"
+#include "pde.hpp"
 
 
 #include <iostream>
@@ -58,7 +59,7 @@ int main(int argc, const char * argv[])
     const double r0 = 0.05;
     const double v0 = 0.1;
     const int ndx = 101;
-    const int ndt = 151;
+    const int ndt = 150;
     const double theta = 0.5;
 
     
@@ -74,7 +75,15 @@ int main(int argc, const char * argv[])
     std::cout << solv << std::endl;
     solv.compute_price();
 
-    double bs_price( spot,  strike,  v0,  maturity, True);
+    //bool boolean = true;
+
+    //double price = dauphine::bs_price(spot,  strike,  v0,  maturity, boolean);
+    //std::cout << "BS price : " << price << std::endl;
+
+    dauphine::pde_european_BS test(vol,rate);
+    std::cout << test.get_coeff_a() << std::endl;
+
+
     
     
     return 0;

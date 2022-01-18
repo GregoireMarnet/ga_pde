@@ -159,20 +159,7 @@ namespace dauphine
     }
 
 
-/*
-    std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
-                                            std::vector<double> final_vect,
-                                            std::vector<double> vect, int ndx)
-    {   
 
-        std::vector<double> result(ndx-2);
-        result = m_trans_2 * final_vect; 
-        result = result + vect;
-        result = m1_inv * result;
-
-        return result;
-
-    }*/
 
 
     void solver::compute_price()
@@ -181,11 +168,8 @@ namespace dauphine
         if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
         {
             double a,b,c,d;
-            std::cout << "coeff b : " << std::endl << b << std::endl;
             this->init_coeff(a,b,c,d);
-            std::cout << "coeff b : " << std::endl << b << std::endl;
             this->transform_coeff(a,b,c,d);
-            std::cout << "coeff b : " << std::endl << b << std::endl;
 
             const int dim = m_msh.get_ndx()-2;
 

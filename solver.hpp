@@ -21,9 +21,10 @@ namespace dauphine
 
         friend std::ostream& operator<<(std::ostream& os, solver const & s) {
             
-            os << "Strike is : " << s.m_poff.get_strike() << std::endl;
+
+            //os << "Strike is : " << s.m_poff.get_strike() << std::endl;
             os << "Spot is : " << s.m_msh.get_spot() << std::endl;
-            os << "Payoff is :" << s.m_poff(s.m_msh.get_spot()) << std::endl ;  
+            //os << "Payoff is :" << s.m_poff(s.m_msh.get_spot()) << std::endl ;  
             os << std::endl;
 
             os << "Log(Smax)  : " << s.m_msh.get_xmax() << std::endl;
