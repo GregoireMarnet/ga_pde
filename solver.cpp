@@ -207,32 +207,28 @@ namespace dauphine
 
             std::copy(final_poff.begin()+1,final_poff.end()-1,final_vect.begin()); // extract only the core part in final_vect
 
-            
+            //std::cout << std::endl << "Mesh à l'initialisation : " << std::endl << mesh_matrix << std::endl;
 
             std::vector<double> vect(ndx-2); // ATTENTION AU COEFF D
             vect[0] = -2 * ( m_bd.get_lower_b() * a + d);
             vect[ndx-3] = -2 * (m_bd.get_upper_b()* a + d);
 
-            std::vector<double> test(ndx-2);
-
-            final_vect = m_trans_2 * final_vect;
-            test = final_vect + vect;
-
-            std::cout << m_msh.get_ndt() << std::endl;
+            //std::cout << std::endl << "Matrice Trans  1 : " << std::endl << m_trans_1 << std::endl;
 
             for (int i=(m_msh.get_ndt()-2); i>=0;i--){
 
                 final_vect = m_trans_2 * final_vect;
-                
+                final_vect = final_vect + vect;
+                final_vect = this->solve_tridiag(m_trans_1,final_vect);
+                //std::cout << std::endl << "Payoff hors BC en colonne : " << i+1 << std::endl << final_vect << std::endl;
 
-                test = final_vect + vect;
-                final_vect = this->solve_tridiag(m_trans_1,test);
                 std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
+
                 this->fill_matrix(mesh_matrix,i,final_poff);
             };
 
             std::cout << mesh_matrix << std::endl;
-
+            std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
         
            
 
