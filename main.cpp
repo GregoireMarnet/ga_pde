@@ -57,8 +57,8 @@ int main(int argc, const char * argv[])
     const double maturity = 0.5;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 15;
-    const int ndt = 15;
+    const int ndx = 11;
+    const int ndt = 1500;
     const double theta = 0.5;
 
 
@@ -72,7 +72,7 @@ int main(int argc, const char * argv[])
     
     std::cout << "Strike is : " << strike << std::endl;
     std::cout << "Spot is : " << spot << std::endl;
-    std::cout << "Payoff is :" << poff_call(spot) << std::endl ;  
+    std::cout << "Payoff is :" << poff_call(log(spot)) << std::endl ;  
     std::cout << std::endl;
 
     std::cout << "Log(Smax)  : " << msh.get_xmax() << std::endl;
