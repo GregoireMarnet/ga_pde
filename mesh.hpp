@@ -20,6 +20,7 @@ class mesh{
     double get_dx() const;
     double get_dt() const;
     double get_T() const;
+    double get_spot() const;
 
     private:
     std::vector<double> m_xaxis;

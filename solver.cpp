@@ -132,12 +132,12 @@ namespace dauphine
         std::vector<double> c(n-1);
 
         for(std::size_t i=0; i<n; i++){
-            for( std::size_t j=i; j<n;j++){
+            for( std::size_t j=0; j<n;j++){
                 if(j==i+1){
                     c[i]=mat(i,j);
                 }
                 else if(j==i-1){
-                    a[i]=mat(i,i-1);
+                    a[j]=mat(i,j);
                 }
                 else if (j==i){
                     b[i]=mat(i,j);
@@ -146,18 +146,19 @@ namespace dauphine
         }
 
         std::vector<double> x(n);
-    
-        for(int i=1; i<n; i++){
+
+        for(int i=1; i<=n-1; i++){
             
-            double w = a[i-1]/b[i-1];
+            double w = double(a[i-1])/double(b[i-1]);
             b[i] -= w*c[i-1];
             d[i] -= w*d[i-1];
         }
         x[n-1] = d[n-1]/b[n-1];
-        for(int i=n-2; i >= 0; i--)
-            x[i] = (d[i]- c[i]*x[i+1])/b[i];
+        for(int i=n-1; i >= 1; i--)
+            x[i-1] = (d[i-1]- c[i-1]*x[i])/b[i-1];
 
 		return x;
+        
     }
 
 

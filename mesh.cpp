@@ -50,4 +50,8 @@ namespace dauphine
         return m_dt;
     }
 
+    double mesh::get_spot() const{
+        return m_spot;
+    }
+
 }

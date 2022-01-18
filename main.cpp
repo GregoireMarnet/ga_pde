@@ -61,40 +61,16 @@ int main(int argc, const char * argv[])
     const int ndt = 15;
     const double theta = 0.5;
 
-
+    
     dauphine::vol_BS vol(v0);
     dauphine::rate_BS rate(r0);
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
 
-    
-    
-    std::cout << "Strike is : " << strike << std::endl;
-    std::cout << "Spot is : " << spot << std::endl;
-    std::cout << "Payoff is :" << poff_call(spot) << std::endl ;  
-    std::cout << std::endl;
-
-    std::cout << "Log(Smax)  : " << msh.get_xmax() << std::endl;
-    std::cout << "Log(Smin)  : " << msh.get_xmin() << std::endl;
-    std::cout << "Smax  : " << exp(msh.get_xmax()) << std::endl;
-    std::cout << "Smin  : " << exp(msh.get_xmin()) << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "Upper Bound : " << bound.get_upper_b() << std::endl;
-    std::cout << "Lower Bound : " << bound.get_lower_b() << std::endl << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "dt : " << msh.get_dt() << std::endl;
-    std::cout << "dx : " << msh.get_dx() << std::endl;
-    std::cout << std::endl;
-
-
-
-
-
-
     dauphine::solver solv(poff_call,msh, bound,vol, rate, theta);
+    
+    std::cout << solv << std::endl;
     solv.compute_price();
 
     
