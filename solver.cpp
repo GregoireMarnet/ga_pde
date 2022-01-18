@@ -60,7 +60,7 @@ namespace dauphine
     {
         const double nu1 = m_msh.get_dt() / pow(m_msh.get_dx(),2);
         const double nu2 = m_msh.get_dt() / m_msh.get_dx();
-        std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
+        //std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
 
         double A = a;
         double B = b;
@@ -102,9 +102,7 @@ namespace dauphine
         };
 
         m_trans(dim-1,dim-2) = -(1-m_theta)*a;
-        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b;
-
-        
+        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b;        
     }
 
     void solver::fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect)
