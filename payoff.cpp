@@ -26,4 +26,8 @@ std::vector<double> payoff_call::operator() (const std::vector<double>& spot) co
     return payout;
 }
 
+double payoff_call::get_strike() const{
+    return p_strike;
+}
+
 }

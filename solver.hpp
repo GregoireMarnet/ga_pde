@@ -8,6 +8,9 @@
 #include "rate.hpp"
 #include "matrix.hpp"
 #include <vector>
+#include <ostream>
+#include <iostream>
+#include <math.h>
 
 
 namespace dauphine
@@ -16,12 +19,32 @@ namespace dauphine
     class solver {
         public : 
 
-        solver(payoff& poff,
-                mesh& msh, 
-                boundary& bd,
-                volatility& vol,
-                rate& rate,
-                double theta);
+        friend std::ostream& operator<<(std::ostream& os, solver const & s) {
+            
+            os << "Strike is : " << s.m_poff.get_strike() << std::endl;
+            os << "Spot is : " << s.m_msh.get_spot() << std::endl;
+            os << "Payoff is :" << s.m_poff(s.m_msh.get_spot()) << std::endl ;  
+            os << std::endl;
+
+            os << "Log(Smax)  : " << s.m_msh.get_xmax() << std::endl;
+            os << "Log(Smin)  : " << s.m_msh.get_xmin() << std::endl;
+            os << "Smax  : " << exp(s.m_msh.get_xmax()) << std::endl;
+            os << "Smin  : " << exp(s.m_msh.get_xmin()) << std::endl;
+            os << std::endl;
+
+            os << "Upper Bound : " << s.m_bd.get_upper_b() << std::endl;
+            os << "Lower Bound : " << s.m_bd.get_lower_b() << std::endl << std::endl;
+            os << std::endl;
+
+            os << "dt : " << s.m_msh.get_dt() << std::endl;
+            os << "dx : " << s.m_msh.get_dx() << std::endl;
+            os << std::endl;
+    
+        return os ;
+         
+        }
+
+        solver(payoff& poff, mesh& msh, boundary& bd,volatility& vol,rate& rate,double theta);
 
         void compute_price();
 
