@@ -58,8 +58,8 @@ int main(int argc, const char * argv[])
     const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 101;
-    const int ndt = 150;
+    const int ndx = 1001;
+    const int ndt = 1500;
     const double theta = 0.5;
 
     
@@ -68,20 +68,19 @@ int main(int argc, const char * argv[])
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
+    dauphine::pde_european_BS pde(vol,rate);
 
 
-    dauphine::solver solv(poff_call,msh, bound,vol, rate, theta);
+    dauphine::solver solv(poff_call,msh, bound, theta);
     
     std::cout << solv << std::endl;
-    solv.compute_price();
+    solv.compute_price(pde);
 
     //bool boolean = true;
 
     //double price = dauphine::bs_price(spot,  strike,  v0,  maturity, boolean);
     //std::cout << "BS price : " << price << std::endl;
 
-    dauphine::pde_european_BS test(vol,rate);
-    std::cout << test.get_coeff_a() << std::endl;
 
 
     

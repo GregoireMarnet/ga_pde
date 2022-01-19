@@ -7,6 +7,7 @@
 #include "boundary_conditions.hpp"
 #include "rate.hpp"
 #include "matrix.hpp"
+#include "pde.hpp"
 #include <vector>
 #include <ostream>
 #include <iostream>
@@ -45,9 +46,9 @@ namespace dauphine
          
         }
 
-        solver(payoff& poff, mesh& msh, boundary& bd,volatility& vol,rate& rate,double theta);
+        solver(payoff& poff, mesh& msh, boundary& bd,double theta);
 
-        void compute_price();
+        void compute_price(pde_european_BS& pde);
 
         void init_coeff(double& a, double& b, double& c, double& d);
         void init_coeff(std::vector<double>& a,
@@ -76,10 +77,8 @@ namespace dauphine
 
         private :
             mesh& m_msh;
-            volatility& m_vol;
             payoff& m_poff;
             boundary& m_bd;
-            rate& m_rate;
             double m_theta;
 
     };

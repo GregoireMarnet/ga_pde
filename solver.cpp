@@ -21,40 +21,39 @@ namespace dauphine
     solver::solver(payoff& poff,
                     mesh& msh, 
                     boundary& bd,
-                    volatility& vol,
-                    rate& rate,
                     double theta)
-    : m_poff(poff), m_msh(msh), m_bd(bd), m_vol(vol), m_rate(rate), m_theta(theta)
+    : m_poff(poff), m_msh(msh), m_bd(bd), m_theta(theta)
     {};
 
 
-    void solver::init_coeff(std::vector<double>& a,
+
+    /*void solver::transform_coeff(std::vector<double>& a,
                         std::vector<double>& b,
                         std::vector<double>& c,
                         std::vector<double>& d)
     {
-        /*std::vector<double> var = m_vol.get_vol();
-        std::transform(var.begin(),var.end(),var.begin(),[](double f)-> double {return f*f;});
-        a = - 0.5 * var;
-        b = 0.5 * var - m_rate.get_rates();
-        c = m_rate.get_rates();
-        d = 0;*/
-    };
+        const double nu1 = m_msh.get_dt() / pow(m_msh.get_dx(),2);
+        const double nu2 = m_msh.get_dt() / m_msh.get_dx();
+        //std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
 
-    void solver::init_coeff(double& a, double& b, double& c, double& d)
-    {
-        a = - 0.5 * pow(m_vol.get_vol()[0],2);
-        b = 0.5 * pow(m_vol.get_vol()[0],2) - m_rate.get_rates()[0];
-        c = m_rate.get_rates()[0];
-        d = 0;
-    };
+        std::vector<double> A = a;
+        std::vector<double> B = b;
+        std::vector<double> C = c;
+        std::vector<double> D = d;
 
-    void solver::transform_coeff(std::vector<double>& a,
-                        std::vector<double>& b,
-                        std::vector<double>& c,
-                        std::vector<double>& d)
-    {
-    };
+        std::transform(a.begin(),a.end(),A.begin(),B.begin(),[nu1,nu2](double A,double B)-> double 
+        {return A*nu1 - 0.5 * B * nu2;});
+
+        std::transform(b.begin(),b.end(),C.begin(),B.begin(),[nu1,nu2](double C,double B)-> double 
+        {return C * m_msh.get_dt() - 2 * A * nu1;});
+
+        std::transform(c.begin(),c.end(),A.begin(),B.begin(),[nu1,nu2](double A,double B)-> double 
+        {return A * nu1  + 0.5 * B * nu2;});
+
+        std::transform(d.begin(),d.end(),D.begin(),[](double D)-> double 
+        {return D * m_msh.get_dt();});
+
+    };*/
 
     void solver::transform_coeff(double& a, double& b, double& c, double& d)
     {
@@ -162,19 +161,19 @@ namespace dauphine
 
 
 
-    void solver::compute_price()
+    void solver::compute_price(pde_european_BS& pde)
     {
 
-        if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
-        {
-            double a,b,c,d;
-            this->init_coeff(a,b,c,d);
+            auto a = pde.get_coeff_a();
+            auto b = pde.get_coeff_b();
+            auto c = pde.get_coeff_c();
+            auto d = pde.get_coeff_d();
+
             this->transform_coeff(a,b,c,d);
 
             const int dim = m_msh.get_ndx()-2;
 
             matrix m_trans_1(dim,dim);
-
             matrix m_trans_2(dim,dim);
 
             this->init_matrice_1(m_trans_1,dim,a,b,c,d); 
@@ -219,14 +218,7 @@ namespace dauphine
 
         
 
-            
-
-
-        
-
-
-        }
-
+    
         
     };
 
