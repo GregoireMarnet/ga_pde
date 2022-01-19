@@ -68,20 +68,25 @@ int main(int argc, const char * argv[])
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
-    dauphine::pde_european_BS pde(vol,rate);
+    dauphine::pde_european_BS pde_BS(vol,rate);
+    
 
     dauphine::vol_gen vol_g(v0,msh,0.001);
-    dauphine::rate_gen rate_g(r0,msh,0.001);
+    dauphine::rate_gen rate_g(r0,msh,0);
+    dauphine::pde_european_gen pde_g(vol_g,rate_g);
 
     dauphine::solver solv(poff_call,msh, bound, theta);
     
     std::cout << solv << std::endl;
-    solv.compute_price(pde);
+    solv.call_compute_price(pde_BS);
+    solv.call_compute_price(pde_g);
 
     //bool boolean = true;
 
     //double price = dauphine::bs_price(spot,  strike,  v0,  maturity, boolean);
     //std::cout << "BS price : " << price << std::endl;
+
+
 
 
 

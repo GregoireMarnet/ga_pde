@@ -48,7 +48,9 @@ namespace dauphine
 
         solver(payoff& poff, mesh& msh, boundary& bd,double theta);
 
-        void compute_price(const pde_european& pde);
+        void call_compute_price(const pde_european& pde);
+        void compute_price(double& a, double& b, double& c, double& d);
+        void compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d);
 
         void solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
                             double& a, double& b, double& c, double& d,
