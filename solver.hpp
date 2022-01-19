@@ -48,13 +48,23 @@ namespace dauphine
 
         solver(payoff& poff, mesh& msh, boundary& bd,double theta);
 
-        void compute_price(pde_european_BS& pde);
+        void compute_price(const pde_european& pde);
 
-        void init_coeff(double& a, double& b, double& c, double& d);
-        void init_coeff(std::vector<double>& a,
-                        std::vector<double>& b,
-                        std::vector<double>& c,
-                        std::vector<double>& d);
+        void solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
+                            double& a, double& b, double& c, double& d,
+                            const int& ndx,
+                            std::vector<double>& final_vect,std::vector<double>& final_poff,std::vector<double>& vect,
+                            matrix& mesh_matrix);
+        void solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
+                            std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d,
+                            const int& ndx,
+                            std::vector<double>& final_vect,std::vector<double>& final_poff,std::vector<double>& vect,
+                            matrix& mesh_matrix);
+
+        double get_coeff_a(const pde_european_BS& pde);
+        double get_coeff_b(const pde_european_BS& pde);
+        double get_coeff_c(const pde_european_BS& pde);
+        double get_coeff_d(const pde_european_BS& pde);
 
         void transform_coeff(double& a, double& b, double& c, double& d);
         void transform_coeff(std::vector<double>& a,
@@ -63,7 +73,18 @@ namespace dauphine
                         std::vector<double>& d);
 
         void init_matrice_1(matrix& m_trans, const int& dim, double a, double b, double c, double d);
+        void init_matrice_1(matrix& m_trans, const int& dim, const int& i,std::vector<double>& a,
+                                                                std::vector<double>& b,
+                                                                std::vector<double>& c,
+                                                                std::vector<double>& d);
+
         void init_matrice_2(matrix& m_trans, const int& dim, double a, double b, double c, double d);
+        void init_matrice_2(matrix& m_trans,const int& dim, const int& i,
+                                std::vector<double>& a,
+                                std::vector<double>& b,
+                                std::vector<double>& c,
+                                std::vector<double>& d);
+
         void fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect);
 
         std::vector<double> solve_tridiag(const matrix& mat, std::vector<double>& d);

@@ -58,7 +58,7 @@ int main(int argc, const char * argv[])
     const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 1001;
+    const int ndx = 101;
     const int ndt = 1500;
     const double theta = 0.5;
 
@@ -70,6 +70,8 @@ int main(int argc, const char * argv[])
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
     dauphine::pde_european_BS pde(vol,rate);
 
+    dauphine::vol_gen vol_g(v0,msh,0.001);
+    dauphine::rate_gen rate_g(r0,msh,0.001);
 
     dauphine::solver solv(poff_call,msh, bound, theta);
     

@@ -6,19 +6,19 @@ namespace dauphine
 
     pde_european::pde_european(){};
 
-    double pde_european::get_coeff_a(){
+    double pde_european_BS::get_coeff_a() const{
         return p_a;
     }
 
-    double pde_european::get_coeff_b(){
+    double pde_european_BS::get_coeff_b() const{
         return p_b;
     }
 
-    double pde_european::get_coeff_c(){
+    double pde_european_BS::get_coeff_c() const{
         return p_c;
     }
 
-    double pde_european::get_coeff_d(){
+    double pde_european_BS::get_coeff_d() const{
         return p_d;
     }
     
@@ -29,4 +29,10 @@ namespace dauphine
         p_c = rate.get_rates()[0];
         p_d = 0;
     }
+    /*
+    pde_european_gen::pde_european_gen(const vol_gen& vol, const rate_gen& rate)
+    {
+
+    }
+    */
 }
