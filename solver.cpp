@@ -89,23 +89,23 @@ namespace dauphine
         
     }
 
-    void solver::init_matrice_1(matrix& m_trans, const int& dim, const int& i,
+    void solver::init_matrice_1(matrix& m_trans, const int& dim, const int& j,
                         std::vector<double>& a,
                         std::vector<double>& b,
                         std::vector<double>& c,
                         std::vector<double>& d)
     {
-        m_trans(0,0) = m_theta*b[i]+1;
-        m_trans(0,1) = m_theta*c[i];
+        m_trans(0,0) = m_theta*b[j]+1;
+        m_trans(0,1) = m_theta*c[j];
 
         for(int i=1; i<dim-1; i++){
-            m_trans(i,i-1) = m_theta*a[i];
-            m_trans(i,i) = m_theta*b[i]+1;
-            m_trans(i,i+1) = m_theta*c[i];
+            m_trans(i,i-1) = m_theta*a[j];
+            m_trans(i,i) = m_theta*b[j]+1;
+            m_trans(i,i+1) = m_theta*c[j];
         };
 
-        m_trans(dim-1,dim-2) = m_theta*a[i];
-        m_trans(dim-1,dim-1) = m_theta*b[i]+1;
+        m_trans(dim-1,dim-2) = m_theta*a[j];
+        m_trans(dim-1,dim-1) = m_theta*b[j]+1;
     }
 
     void solver::init_matrice_2(matrix& m_trans,const int& dim, double a, double b, double c, double d)
@@ -123,23 +123,23 @@ namespace dauphine
         m_trans(dim-1,dim-1) = 1-(1-m_theta)*b;        
     }
 
-    void solver::init_matrice_2(matrix& m_trans,const int& dim, const int& i,
+    void solver::init_matrice_2(matrix& m_trans,const int& dim, const int& j,
                                 std::vector<double>& a,
                                 std::vector<double>& b,
                                 std::vector<double>& c,
                                 std::vector<double>& d)
     {
-        m_trans(0,0) = 1-(1-m_theta)*b[i+1];
-        m_trans(0,1) = -(1-m_theta)*c[i+1];
+        m_trans(0,0) = 1-(1-m_theta)*b[j+1];
+        m_trans(0,1) = -(1-m_theta)*c[j+1];
 
         for(int i=1; i<dim-1; i++){
-            m_trans(i,i-1) = -(1-m_theta)*a[i+1];
-            m_trans(i,i) = 1-(1-m_theta)*b[i+1];
-            m_trans(i,i+1) = -(1-m_theta)*c[i+1];
+            m_trans(i,i-1) = -(1-m_theta)*a[j+1];
+            m_trans(i,i) = 1-(1-m_theta)*b[j+1];
+            m_trans(i,i+1) = -(1-m_theta)*c[j+1];
         };
 
-        m_trans(dim-1,dim-2) = -(1-m_theta)*a[i+1];
-        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b[i+1];        
+        m_trans(dim-1,dim-2) = -(1-m_theta)*a[j+1];
+        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b[j+1];        
     }
 
     void solver::fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect)
@@ -255,6 +255,7 @@ namespace dauphine
         //std::cout << m_trans_1;
         //std::cout << m_trans_2;
         //std::cout <<vect;
+        //std::cout <<final_vect;
     }
 
 

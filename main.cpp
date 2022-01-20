@@ -58,9 +58,12 @@ int main(int argc, const char * argv[])
     const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 101;
+    const int ndx = 1001;
     const int ndt = 1500;
     const double theta = 0.5;
+
+    const double kappa = 2;
+    const double heston_theta = 0.12;
 
     
     dauphine::vol_BS vol(v0);
@@ -71,20 +74,18 @@ int main(int argc, const char * argv[])
     dauphine::pde_european_BS pde_BS(vol,rate);
     
 
-    dauphine::vol_gen vol_g(v0,msh,0.001);
-    dauphine::rate_gen rate_g(r0,msh,0);
-    dauphine::pde_european_gen pde_g(vol_g,rate_g);
+    dauphine::vol_heston vol_h(v0,kappa,heston_theta,msh);
+    dauphine::pde_european_heston pde_h(vol_h,rate);
 
     dauphine::solver solv(poff_call,msh, bound, theta);
     
     std::cout << solv << std::endl;
     solv.call_compute_price(pde_BS);
-    solv.call_compute_price(pde_g);
+    solv.call_compute_price(pde_h);
 
-    //bool boolean = true;
 
-    //double price = dauphine::bs_price(spot,  strike,  v0,  maturity, boolean);
-    //std::cout << "BS price : " << price << std::endl;
+
+    
 
 
 

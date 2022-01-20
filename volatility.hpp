@@ -31,6 +31,12 @@ class vol_gen : public volatility
     
 };
 
+class vol_heston : public volatility
+{
+    public:
+        vol_heston(const double& sigma,const double& kappa, const double& theta , const dauphine::mesh& msh);
+};
+
 };
 
 #endif

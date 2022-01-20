@@ -4,7 +4,26 @@ namespace dauphine
 {
     pde::pde(){};
 
-    pde_european::pde_european(){};
+    pde_european::pde_european(const volatility& vol, const rate& rate){
+        const int size_vol = vol.get_vol().size();
+        const int size_rate = rate.get_rates().size();
+        const int size = std::max(size_vol,size_rate);
+
+        p_a.resize(size);
+        p_b.resize(size);
+        p_c.resize(size);
+        p_d.resize(size);
+
+        for (int i=0; i<size; i++)
+        {
+            int k = std::min(i,size_vol-1);
+            int j = std::min(i,size_rate-1);
+            p_a[i] = - 0.5 * pow(vol.get_vol()[k],2);
+            p_b[i] = 0.5 * pow(vol.get_vol()[k],2) - rate.get_rates()[j];
+            p_c[i] = rate.get_rates()[j];
+            p_d[i]=0; 
+        }
+    };
 
     std::vector<double> pde_european::get_coeff_a() const{
         return p_a;
@@ -23,31 +42,18 @@ namespace dauphine
     }
     
     pde_european_BS::pde_european_BS(const vol_BS& vol,const rate_BS& rate)
+    : pde_european(vol,rate)
     {
-        p_a.resize(1);
-        p_b.resize(1);
-        p_c.resize(1);
-        p_d.resize(1);
-        p_a[0] = - 0.5 * pow(vol.get_vol()[0],2);
-        p_b[0] = 0.5 * pow(vol.get_vol()[0],2) - rate.get_rates()[0];
-        p_c[0] = rate.get_rates()[0];
-        p_d[0]=0;
     }
     
-    pde_european_gen::pde_european_gen(const vol_gen& vol, const rate_gen& rate)
+    pde_european_gen::pde_european_gen(const volatility& vol, const rate& rate)
+    : pde_european(vol,rate)
     {
-        const int size = vol.get_vol().size();
-        p_a.resize(size);
-        p_b.resize(size);
-        p_c.resize(size);
-        p_d.resize(size);
-        for (int i=0; i<size; i++)
-        {
-            p_a[i] = - 0.5 * pow(vol.get_vol()[i],2);
-            p_b[i] = 0.5 * pow(vol.get_vol()[i],2) - rate.get_rates()[i];
-            p_c[i] = rate.get_rates()[i];
-            p_d[i]=0; 
-        }
+    }
+
+    pde_european_heston::pde_european_heston(const vol_heston& vol, const rate_BS& rate)
+    : pde_european(vol,rate)
+    {
     }
 
 }

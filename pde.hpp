@@ -4,6 +4,7 @@
 #include "volatility.hpp"
 #include "rate.hpp"
 #include <math.h>
+#include <algorithm>
 
 namespace dauphine 
 {
@@ -13,10 +14,10 @@ namespace dauphine
             pde();
     };
 
-    class pde_european : public pde // virtuelle pure
+    class pde_european : public pde 
     {
         public :
-            pde_european();
+            pde_european(const volatility& vol, const rate& rate);
             std::vector<double> get_coeff_a() const;
             std::vector<double> get_coeff_b() const;
             std::vector<double> get_coeff_c() const;
@@ -40,9 +41,15 @@ namespace dauphine
         
         class pde_european_gen : public pde_european{
             public:
-                pde_european_gen(const vol_gen& vol, const rate_gen& rate);
+                pde_european_gen(const volatility& vol, const rate& rate);
+        };
+
+        class pde_european_heston : public pde_european{
+            public:
+                pde_european_heston(const vol_heston& vol, const rate_BS& rate);
         };
         
+
 
 
 
