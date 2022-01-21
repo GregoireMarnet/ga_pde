@@ -59,30 +59,41 @@ int main(int argc, const char * argv[])
     const double r0 = 0.05;
     const double v0 = 0.1;
 
-    const int ndx = 1001;
-    const int ndt = 1500;
+    const int ndx = 101;
+    const int ndt = 150;
     const double theta = 0.5;
 
     const double kappa = 2;
     const double heston_theta = 0.12;
 
-    
-    dauphine::vol_BS vol(v0);
-    dauphine::rate_BS rate(r0);
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
-    dauphine::pde_european_BS pde_BS(vol,rate);
-    
+
+    dauphine::vol_BS vol(v0);
+    dauphine::rate_BS rate(r0);
 
     dauphine::vol_heston vol_h(v0,kappa,heston_theta,msh);
-    dauphine::pde_european_heston pde_h(vol_h,rate);
-
-    dauphine::solver solv(poff_call,msh, bound, theta);
+    dauphine::rate_gen rg(r0, msh, 0.);
     
+    dauphine::pde_european pde_europ(vol_h,rg);
+    
+    dauphine::solver solv(poff_call,msh, bound, theta);
+
     std::cout << solv << std::endl;
-    solv.call_compute_price(pde_BS);
-    solv.call_compute_price(pde_h);
+    solv.call_compute_price(pde_europ);
+
+
+
+
+    
+
+   
+    //dauphine::pde_european_heston pde_h(vol_h,rate);
+
+    
+    
+    
     
     
     return 0;

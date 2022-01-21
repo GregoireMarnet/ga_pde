@@ -40,20 +40,6 @@ namespace dauphine
     std::vector<double> pde_european::get_coeff_d() const{
         return p_d;
     }
-    
-    pde_european_BS::pde_european_BS(const vol_BS& vol,const rate_BS& rate)
-    : pde_european(vol,rate)
-    {
-    }
-    
-    pde_european_gen::pde_european_gen(const volatility& vol, const rate& rate)
-    : pde_european(vol,rate)
-    {
-    }
 
-    pde_european_heston::pde_european_heston(const vol_heston& vol, const rate_BS& rate)
-    : pde_european(vol,rate)
-    {
-    }
 
 }

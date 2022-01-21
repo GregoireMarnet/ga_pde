@@ -63,10 +63,10 @@ namespace dauphine
                             std::vector<double>& final_vect,std::vector<double>& final_poff,std::vector<double>& vect,
                             matrix& mesh_matrix);
 
-        double get_coeff_a(const pde_european_BS& pde);
-        double get_coeff_b(const pde_european_BS& pde);
-        double get_coeff_c(const pde_european_BS& pde);
-        double get_coeff_d(const pde_european_BS& pde);
+        double get_coeff_a(const pde_european& pde);
+        double get_coeff_b(const pde_european& pde);
+        double get_coeff_c(const pde_european& pde);
+        double get_coeff_d(const pde_european& pde);
 
         void transform_coeff(double& a, double& b, double& c, double& d);
         void transform_coeff(std::vector<double>& a,
@@ -106,21 +106,6 @@ namespace dauphine
 
     };
 
-/*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
-                                const Eigen::MatrixXd& a,
-                                const Eigen::MatrixXd& b,
-                                const Eigen::MatrixXd& c,
-                                const Eigen::MatrixXd& d,
-                                const double& theta,
-                                const double& T,
-                                const int& n_dt,
-                                const double& s_min,
-                                const double& s_max,
-                                const int& n_dx,
-                                dauphine::boundary& bd);
-
-void print_solver_mesh(double rate, double maturity);
-*/
 }
 
 #endif
