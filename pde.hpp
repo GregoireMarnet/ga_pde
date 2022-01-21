@@ -30,31 +30,6 @@ namespace dauphine
 
     };
 
-        class pde_european_BS : public pde_european
-        {
-            public:
-                pde_european_BS(const vol_BS& vol, const rate_BS& rate);
-                
-            
-        };
-
-        
-        class pde_european_gen : public pde_european{
-            public:
-                pde_european_gen(const volatility& vol, const rate& rate);
-        };
-
-        class pde_european_heston : public pde_european{
-            public:
-                pde_european_heston(const vol_heston& vol, const rate_BS& rate);
-        };
-        
-
-
-
-
-
-
 }
 
 

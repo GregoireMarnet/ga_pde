@@ -37,6 +37,8 @@ set(PDE_SOLVER_SRCS
     mesh.cpp
     matrix.hpp
     matrix.cpp
+    pde.hpp
+    pde.cpp
     main.cpp
 )
 
