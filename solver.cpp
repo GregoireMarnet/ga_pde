@@ -21,39 +21,38 @@ namespace dauphine
     solver::solver(payoff& poff,
                     mesh& msh, 
                     boundary& bd,
-                    volatility& vol,
-                    rate& rate,
                     double theta)
-    : m_poff(poff), m_msh(msh), m_bd(bd), m_vol(vol), m_rate(rate), m_theta(theta)
+    : m_poff(poff), m_msh(msh), m_bd(bd), m_theta(theta)
     {};
-
-
-    void solver::init_coeff(std::vector<double>& a,
-                        std::vector<double>& b,
-                        std::vector<double>& c,
-                        std::vector<double>& d)
-    {
-        /*std::vector<double> var = m_vol.get_vol();
-        std::transform(var.begin(),var.end(),var.begin(),[](double f)-> double {return f*f;});
-        a = - 0.5 * var;
-        b = 0.5 * var - m_rate.get_rates();
-        c = m_rate.get_rates();
-        d = 0;*/
-    };
-
-    void solver::init_coeff(double& a, double& b, double& c, double& d)
-    {
-        a = - 0.5 * pow(m_vol.get_vol()[0],2);
-        b = 0.5 * pow(m_vol.get_vol()[0],2) - m_rate.get_rates()[0];
-        c = m_rate.get_rates()[0];
-        d = 0;
-    };
 
     void solver::transform_coeff(std::vector<double>& a,
                         std::vector<double>& b,
                         std::vector<double>& c,
                         std::vector<double>& d)
     {
+        const double dt = m_msh.get_dt();
+        const double dx = m_msh.get_dx();
+        const double nu1 = dt / pow(dx,2);
+        const double nu2 = dt / dx;
+        //std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
+        
+        std::vector<double> A = a;
+        std::vector<double> B = b;
+        std::vector<double> C = c;
+        std::vector<double> D = d;
+
+        std::transform(A.begin(),A.end(),B.begin(),a.begin(),[nu1,nu2](double xA,double xB)-> double 
+        {return xA*nu1 - 0.5 * xB * nu2;});
+
+        std::transform(C.begin(),C.end(),A.begin(),b.begin(),[nu1,nu2,dt](double xC,double xA)-> double 
+        {return xC * dt - 2 * xA * nu1;});
+
+        std::transform(A.begin(),A.end(),B.begin(),c.begin(),[nu1,nu2](double xA,double xB)-> double 
+        {return xA * nu1  + 0.5 * xB * nu2;});
+
+        std::transform(D.begin(),D.end(),d.begin(),[dt](double xD)-> double 
+        {return xD * dt;});
+
     };
 
     void solver::transform_coeff(double& a, double& b, double& c, double& d)
@@ -90,6 +89,25 @@ namespace dauphine
         
     }
 
+    void solver::init_matrice_1(matrix& m_trans, const int& dim, const int& j,
+                        std::vector<double>& a,
+                        std::vector<double>& b,
+                        std::vector<double>& c,
+                        std::vector<double>& d)
+    {
+        m_trans(0,0) = m_theta*b[j]+1;
+        m_trans(0,1) = m_theta*c[j];
+
+        for(int i=1; i<dim-1; i++){
+            m_trans(i,i-1) = m_theta*a[j];
+            m_trans(i,i) = m_theta*b[j]+1;
+            m_trans(i,i+1) = m_theta*c[j];
+        };
+
+        m_trans(dim-1,dim-2) = m_theta*a[j];
+        m_trans(dim-1,dim-1) = m_theta*b[j]+1;
+    }
+
     void solver::init_matrice_2(matrix& m_trans,const int& dim, double a, double b, double c, double d)
     {
         m_trans(0,0) = 1-(1-m_theta)*b;
@@ -103,6 +121,25 @@ namespace dauphine
 
         m_trans(dim-1,dim-2) = -(1-m_theta)*a;
         m_trans(dim-1,dim-1) = 1-(1-m_theta)*b;        
+    }
+
+    void solver::init_matrice_2(matrix& m_trans,const int& dim, const int& j,
+                                std::vector<double>& a,
+                                std::vector<double>& b,
+                                std::vector<double>& c,
+                                std::vector<double>& d)
+    {
+        m_trans(0,0) = 1-(1-m_theta)*b[j+1];
+        m_trans(0,1) = -(1-m_theta)*c[j+1];
+
+        for(int i=1; i<dim-1; i++){
+            m_trans(i,i-1) = -(1-m_theta)*a[j+1];
+            m_trans(i,i) = 1-(1-m_theta)*b[j+1];
+            m_trans(i,i+1) = -(1-m_theta)*c[j+1];
+        };
+
+        m_trans(dim-1,dim-2) = -(1-m_theta)*a[j+1];
+        m_trans(dim-1,dim-1) = 1-(1-m_theta)*b[j+1];        
     }
 
     void solver::fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect)
@@ -158,46 +195,103 @@ namespace dauphine
         
     }
 
+    void solver::solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
+                            double& a, double& b, double& c, double& d,
+                            const int& ndx,
+                            std::vector<double>& final_vect,std::vector<double>& final_poff,std::vector<double>& vect,
+                            matrix& mesh_matrix)
+    {
+        this->init_matrice_1(m_trans_1,ndx-2,a,b,c,d); 
+        this-> init_matrice_2(m_trans_2,ndx-2,a,b,c,d);
 
-/*
-    std::vector<double> solver::solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
-                                            std::vector<double> final_vect,
-                                            std::vector<double> vect, int ndx)
-    {   
+             
+        vect[0] = -m_bd.get_lower_b() * a + d;
+        vect[ndx-3] = - m_bd.get_upper_b()* a + d;
 
-        std::vector<double> result(ndx-2);
-        result = m_trans_2 * final_vect; 
-        result = result + vect;
-        result = m1_inv * result;
+        for (int i=(m_msh.get_ndt()-2); i>=0;i--){
 
-        return result;
+            final_vect = m_trans_2 * final_vect;
+            final_vect = final_vect + vect;
+            final_vect = this->solve_tridiag(m_trans_1,final_vect);
 
-    }*/
+            std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
 
+            this->fill_matrix(mesh_matrix,i,final_poff);
+        };
 
-    void solver::compute_price()
+        //std::cout << m_trans_1;
+        //std::cout << m_trans_2;
+        //std::cout <<vect;
+    }
+    
+    void solver::solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
+                            std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d,
+                            const int& ndx,
+                            std::vector<double>& final_vect,std::vector<double>& final_poff,std::vector<double>& vect,
+                            matrix& mesh_matrix)
     {
 
-        if (m_vol.get_vol().size() == 1 && m_rate.get_rates().size()==1) 
-        {
-            double a,b,c,d;
-            std::cout << "coeff b : " << std::endl << b << std::endl;
-            this->init_coeff(a,b,c,d);
-            std::cout << "coeff b : " << std::endl << b << std::endl;
+        for (int i=(m_msh.get_ndt()-2); i>=0;i--){
+
+            this->init_matrice_1(m_trans_1,ndx-2,i,a,b,c,d); 
+            this->init_matrice_2(m_trans_2,ndx-2,i,a,b,c,d);
+
+            
+            vect[0] = -m_theta*(m_bd.get_lower_b() * a[i] + d[i]) 
+                        - (1-m_theta)*(m_bd.get_lower_b() * a[i+1] + d[i+1]);
+
+            vect[ndx-3] = -m_theta*(m_bd.get_upper_b()* a[i] + d[i])
+                            - (1-m_theta)*(m_bd.get_upper_b()* a[i+1] + d[i+1]);
+
+            final_vect = m_trans_2 * final_vect;
+            final_vect = final_vect + vect;
+            final_vect = this->solve_tridiag(m_trans_1,final_vect);
+
+            std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
+
+            this->fill_matrix(mesh_matrix,i,final_poff);
+        };
+
+        //std::cout << m_trans_1;
+        //std::cout << m_trans_2;
+        //std::cout <<vect;
+        //std::cout <<final_vect;
+    }
+
+
+
+    void solver::call_compute_price(const pde_european& pde)
+    {
+        const int size = pde.get_coeff_a().size();
+
+        if (size==1){
+            double a = pde.get_coeff_a()[0];
+            double b = pde.get_coeff_b()[0];
+            double c = pde.get_coeff_c()[0];
+            double d = pde.get_coeff_d()[0];
+            this->compute_price(a,b,c,d);
+            
+            }
+        else{
+            std::vector<double> a = pde.get_coeff_a();
+            std::vector<double> b = pde.get_coeff_b();
+            std::vector<double> c = pde.get_coeff_c();
+            std::vector<double> d = pde.get_coeff_d();
+            this->compute_price(a,b,c,d);
+            }
+    }
+
+    void solver::compute_price(double& a, double& b, double& c, double& d)
+    {       
             this->transform_coeff(a,b,c,d);
-            std::cout << "coeff b : " << std::endl << b << std::endl;
-
-            const int dim = m_msh.get_ndx()-2;
-
-            matrix m_trans_1(dim,dim);
-
-            matrix m_trans_2(dim,dim);
-
-            this->init_matrice_1(m_trans_1,dim,a,b,c,d); 
-            this-> init_matrice_2(m_trans_2,dim,a,b,c,d);
 
             const int ndx = m_msh.get_ndx();
             const int ndt = m_msh.get_ndt();
+
+            matrix m_trans_1(ndx-2,ndx-2);
+            matrix m_trans_2(ndx-2,ndx-2);
+
+            std::vector<double> vect(ndx-2);    // ATTENTION AU COEFF D
 
             matrix mesh_matrix(ndx,ndt);
         
@@ -208,83 +302,51 @@ namespace dauphine
 
             std::copy(final_poff.begin()+1,final_poff.end()-1,final_vect.begin()); // extract only the core part in final_vect
 
-            //std::cout << std::endl << "Mesh à l'initialisation : " << std::endl << mesh_matrix << std::endl;
 
-            std::vector<double> vect(ndx-2); // ATTENTION AU COEFF D
-            vect[0] = -m_bd.get_lower_b() * a + d;
-            vect[ndx-3] = - m_bd.get_upper_b()* a + d;
+            this->solve_mesh(m_trans_1,m_trans_2,a,b,c,d,ndx,final_vect,final_poff,vect,mesh_matrix);
 
-            //std::cout << std::endl << "Matrice Trans  1 : " << std::endl << m_trans_1 << std::endl;
 
-            for (int i=(m_msh.get_ndt()-2); i>=0;i--){
-
-                final_vect = m_trans_2 * final_vect;
-                final_vect = final_vect + vect;
-                final_vect = this->solve_tridiag(m_trans_1,final_vect);
-                //std::cout << std::endl << "Payoff hors BC en colonne : " << i+1 << std::endl << final_vect << std::endl;
-
-                std::copy(final_vect.begin(),final_vect.end(),final_poff.begin()+1);
-
-                this->fill_matrix(mesh_matrix,i,final_poff);
-            };
-
-            //std::cout << mesh_matrix << std::endl;
             std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
-        
-           
 
-        
+            //std::cout << mesh_matrix;
 
             
-
-
         
-
-
-        }
-
-        
-    };
-
-
-
-/*std::vector<double> solver_mesh(dauphine::payoff& payoff, 
-
-                                const Eigen::MatrixXd& a,
-                                const Eigen::MatrixXd& b,
-                                const Eigen::MatrixXd& c,
-                                const Eigen::MatrixXd& d,
-                                const double& theta,
-                                const double& T,
-                                const int& n_dt,
-                                const double& s_min,
-                                const double& s_max,
-                                const int& n_dx,
-                                dauphine::boundary& bd) // need to define it
-
-
-{
-    Eigen::Matrix<double, n_dx + 1, n_dt + 1> A;
-    Eigen::Matrix<double, n_dx + 1, n_dt + 1> B;
-    Eigen::Matrix<double, n_dx + 1, n_dt + 1> C;
-    Eigen::Matrix<double, n_dx + 1, n_dt + 1> D;
-
-    const double dt = T / n_dt;
-    const double dx = (s_max - s_min) / n_dx;
-
-    const double nu1 = dt / dx^2;
-    const double nu2 = dt / dx;
-
-    for ( int i=0 ; i < n_dx + 1 ; i++) {
-	    for ( int j=0 ; j < n_dt + 1 ; j++ {
-		    A(i,j) =  (a(i,j)*nu1 - (1/2) * b(i,j) * nu2) ;
-		    B(i,j) =  (c(i,j) * dt - 2 * a(i,j) * nu1) ;
-		    C(i,j) =  (a(i,j) * nu1  + (1/2) * b(i,j) * nu2) ;
-		    D(i,j) =  d(i,j) * dt ;
-	    }
+    
     }
 
+    void solver::compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d)
+    {       
+            this->transform_coeff(a,b,c,d);
 
-};*/
+            const int ndx = m_msh.get_ndx();
+            const int ndt = m_msh.get_ndt();
+
+            matrix m_trans_1(ndx-2,ndx-2);
+            matrix m_trans_2(ndx-2,ndx-2);
+
+            std::vector<double> vect(ndx-2);    // ATTENTION AU COEFF D
+
+            matrix mesh_matrix(ndx,ndt);
+        
+            std::vector<double> final_poff = m_poff(m_msh.get_xaxis());
+            std::vector<double> final_vect(ndx-2);
+
+            this->fill_matrix(mesh_matrix,mesh_matrix.nb_cols()-1,final_poff); //Compute complete final cond
+
+            std::copy(final_poff.begin()+1,final_poff.end()-1,final_vect.begin()); // extract only the core part in final_vect
+
+
+            this->solve_mesh(m_trans_1,m_trans_2,a,b,c,d,ndx,final_vect,final_poff,vect,mesh_matrix);
+
+
+            std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
+
+            //std::cout << mesh_matrix;
+
+            
+    
+    }
+
 
 }

@@ -6,6 +6,7 @@
 #include "solver.hpp"
 #include "rate.hpp"
 #include "matrix.hpp"
+#include "pde.hpp"
 
 
 #include <iostream>
@@ -57,9 +58,13 @@ int main(int argc, const char * argv[])
     const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
-    const int ndx = 101;
-    const int ndt = 151;
+
+    const int ndx = 1001;
+    const int ndt = 1500;
     const double theta = 0.5;
+
+    const double kappa = 2;
+    const double heston_theta = 0.12;
 
     
     dauphine::vol_BS vol(v0);
@@ -67,14 +72,17 @@ int main(int argc, const char * argv[])
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
     dauphine::payoff_call poff_call(strike); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
+    dauphine::pde_european_BS pde_BS(vol,rate);
+    
 
+    dauphine::vol_heston vol_h(v0,kappa,heston_theta,msh);
+    dauphine::pde_european_heston pde_h(vol_h,rate);
 
-    dauphine::solver solv(poff_call,msh, bound,vol, rate, theta);
+    dauphine::solver solv(poff_call,msh, bound, theta);
     
     std::cout << solv << std::endl;
-    solv.compute_price();
-
-    double bs_price( spot,  strike,  v0,  maturity, True);
+    solv.call_compute_price(pde_BS);
+    solv.call_compute_price(pde_h);
     
     
     return 0;
