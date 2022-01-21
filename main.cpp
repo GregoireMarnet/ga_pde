@@ -58,6 +58,7 @@ int main(int argc, const char * argv[])
     const double maturity = 1;
     const double r0 = 0.05;
     const double v0 = 0.1;
+
     const int ndx = 1001;
     const int ndt = 1500;
     const double theta = 0.5;
@@ -82,15 +83,6 @@ int main(int argc, const char * argv[])
     std::cout << solv << std::endl;
     solv.call_compute_price(pde_BS);
     solv.call_compute_price(pde_h);
-
-
-
-    
-
-
-
-
-
     
     
     return 0;
