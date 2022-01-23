@@ -6,14 +6,18 @@ namespace dauphine
 
 rate::rate(){};
 
-rate_BS::rate_BS (double r)
+rate::rate(std::vector<double> r){
+    p_rate.resize(r.size());
+    p_rate = r;
+}
+
+rate::rate(double r)
 {   
     p_rate.resize(1);
     p_rate[0] = r;
 }
 
-
-rate_gen::rate_gen (double r, dauphine::mesh msh, double alpha)
+rate::rate (double r, dauphine::mesh msh, double alpha)
 {
     const int n_dt = msh.get_ndt();
     p_rate.resize(n_dt);
@@ -28,6 +32,5 @@ std::vector<double> rate::get_rates() const
 {
     return p_rate;
 }
-
 
 }

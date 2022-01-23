@@ -15,18 +15,21 @@ class payoff
         virtual std::vector<double> operator() (const std::vector<double>& spot) const = 0;
 };
 
-class payoff_call : public payoff
+class vanilla_poff : public payoff
 {
     private : 
         double p_strike;
+        bool p_is_call;
 
     public:
-        payoff_call(const double& strike);
+        vanilla_poff(const double& strike, const bool& is_call);
         double get_strike() const;
+        bool get_type() const;
         virtual double operator() (const double& spot) const;
         virtual std::vector<double> operator() (const std::vector<double>& spot) const;
 
 };
+
 
 };
 

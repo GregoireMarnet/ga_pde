@@ -22,11 +22,7 @@ namespace dauphine
 
         friend std::ostream& operator<<(std::ostream& os, solver const & s) {
             
-
-            //os << "Strike is : " << s.m_poff.get_strike() << std::endl;
             os << "Spot is : " << s.m_msh.get_spot() << std::endl;
-            //os << "Payoff is :" << s.m_poff(s.m_msh.get_spot()) << std::endl ;  
-            os << std::endl;
 
             os << "Log(Smax)  : " << s.m_msh.get_xmax() << std::endl;
             os << "Log(Smin)  : " << s.m_msh.get_xmin() << std::endl;
@@ -41,6 +37,7 @@ namespace dauphine
             os << "dt : " << s.m_msh.get_dt() << std::endl;
             os << "dx : " << s.m_msh.get_dx() << std::endl;
             os << std::endl;
+
     
         return os ;
          
@@ -48,9 +45,9 @@ namespace dauphine
 
         solver(payoff& poff, mesh& msh, boundary& bd,double theta);
 
-        void call_compute_price(const pde_european& pde);
-        void compute_price(double& a, double& b, double& c, double& d);
-        void compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d);
+        matrix price(const pde_european& pde);
+        matrix compute_price(double& a, double& b, double& c, double& d);
+        matrix compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d);
 
         void solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
                             double& a, double& b, double& c, double& d,
@@ -75,10 +72,11 @@ namespace dauphine
                         std::vector<double>& d);
 
         void init_matrice_1(matrix& m_trans, const int& dim, double a, double b, double c, double d);
-        void init_matrice_1(matrix& m_trans, const int& dim, const int& i,std::vector<double>& a,
-                                                                std::vector<double>& b,
-                                                                std::vector<double>& c,
-                                                                std::vector<double>& d);
+        void init_matrice_1(matrix& m_trans, const int& dim, const int& i,
+                                std::vector<double>& a,
+                                std::vector<double>& b,
+                                std::vector<double>& c,
+                                std::vector<double>& d);
 
         void init_matrice_2(matrix& m_trans, const int& dim, double a, double b, double c, double d);
         void init_matrice_2(matrix& m_trans,const int& dim, const int& i,

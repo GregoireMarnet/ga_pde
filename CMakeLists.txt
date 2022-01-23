@@ -39,6 +39,8 @@ set(PDE_SOLVER_SRCS
     matrix.cpp
     pde.hpp
     pde.cpp
+    greeks.hpp
+    greeks.cpp
     main.cpp
 )
 

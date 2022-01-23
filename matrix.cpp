@@ -1,16 +1,23 @@
 #include "matrix.hpp"
 #include <math.h>
 #include <string>
+#include <iomanip>
+#include <cmath>
+
+
 
 namespace dauphine {
 
+    /* print matrix */
     std::ostream& operator<<(std::ostream& out, const matrix& m)
     {
         for(std::size_t i = 0; i < m.nb_rows(); ++i)
         {
             for(std::size_t j = 0; j < m.nb_cols(); ++j)
             {
-                out << m(i, j) << " ";
+                double round = m(i, j);
+                round = std::ceil(round * 100.0) / 100.0;
+                out << std::left<< std::setw(7) << round;
             }
             out << std::endl;
         }

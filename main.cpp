@@ -7,13 +7,11 @@
 #include "rate.hpp"
 #include "matrix.hpp"
 #include "pde.hpp"
-
-
+#include "greeks.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <math.h> 
-//#include "eigen-3.4.0/Eigen/Core"
 
 
 // Guidelines:
@@ -37,64 +35,81 @@
 // that allows to register a function or an abstract class modeling
 // a payoff.
 
-
-
-std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
-{
-    for(std::size_t i = 0; i < input.size(); ++i)
-        {
-                out << input[i] << " ";
-        }
-        out << std::endl;
+ /* print vector */
+    std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
+    {
+        for(std::size_t i = 0; i < input.size(); ++i)
+            {
+                    out << input[i] << " ";
+            }
+            out << std::endl;
+            return out;
         return out;
-    return out;
-}
+    }
+
 
 int main(int argc, const char * argv[])
 {
-    
-    const double strike = 100;
-    const double spot = 100;
-    const double maturity = 1;
+    // Parameters of the option
+    const bool is_call = true;
+    const double spot = 100.;
+    const double strike = 100.;
+    const double maturity = 1.; // in years
+    const double v0 = 0.10;
     const double r0 = 0.05;
-    const double v0 = 0.1;
+    
+    // Parameters of the mesh space 
+    const int ndx = 501; // enter odd number 
+    const int ndt = 100;
 
-    const int ndx = 101;
-    const int ndt = 150;
+    // Theta scheme parameter
     const double theta = 0.5;
 
+    // Parameters to implement an heston model 
     const double kappa = 2;
     const double heston_theta = 0.12;
 
+    // Mesh space definition
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
-    dauphine::payoff_call poff_call(strike); 
+    dauphine::vanilla_poff poff_call(strike, is_call); 
     dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
 
+    // Constant parameters definition
     dauphine::vol_BS vol(v0);
-    dauphine::rate_BS rate(r0);
+    dauphine::rate rate(r0,msh,0.);
 
+    // Non-constant parameters definition
     dauphine::vol_heston vol_h(v0,kappa,heston_theta,msh);
-    dauphine::rate_gen rg(r0, msh, 0.);
+    dauphine::rate rg(r0, msh, 0.);
     
-    dauphine::pde_european pde_europ(vol_h,rg);
+    // Definition of the pde to solve
+    dauphine::pde_european pde(vol,rate);
     
-    dauphine::solver solv(poff_call,msh, bound, theta);
-
+    // Building finite difference method parameters
+    dauphine::solver solv(poff_call, msh, bound, theta);
     std::cout << solv << std::endl;
-    solv.call_compute_price(pde_europ);
 
+    // Results
+    double cf  =  dauphine::bs_price(spot,strike,v0,maturity,is_call) ;
+    std::cout << "Closed form price : " << cf << " (with assumption r=0)" << std::endl;
+    dauphine::matrix result = solv.price(pde);
+    std::cout << "Finite difference method price : " << result((ndx-1)/2,0) << std::endl << std::endl;
+    
+    //Greeks
+    double delta = dauphine::delta(result,msh.get_xaxis(),ndx/2);
+    std::cout << "Delta : " << delta << std::endl;
 
+    double gamma = dauphine::gamma(result,msh.get_xaxis());
+    std::cout << "Gamma : " << gamma << std::endl;
 
+    double rho = dauphine::rho(result,solv,vol,rate, ndx);
+    std::cout << "Rho : " <<  rho << std::endl;
 
-    
+    double vega = dauphine::vega(result,solv,vol,rate, ndx);
+    std::cout << "Vega : " <<  vega << std::endl;
 
-   
-    //dauphine::pde_european_heston pde_h(vol_h,rate);
+    double t = dauphine::theta(result,msh.get_dt(),ndx/2);
+    std::cout << "Theta : " << t << std::endl;
 
-    
-    
-    
-    
-    
     return 0;
 }

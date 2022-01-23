@@ -1,22 +1,8 @@
 #include "solver.hpp"
-#include <math.h>
 #include <algorithm>
-
-
 
 namespace dauphine
 {
-
-    std::ostream &operator<<(std::ostream &out, const std::vector<double> &input)
-    {
-        for(std::size_t i = 0; i < input.size(); ++i)
-            {
-                    out << input[i] << " ";
-            }
-            out << std::endl;
-            return out;
-        return out;
-    }
 
     solver::solver(payoff& poff,
                     mesh& msh, 
@@ -260,7 +246,7 @@ namespace dauphine
 
 
 
-    void solver::call_compute_price(const pde_european& pde)
+    matrix solver::price(const pde_european& pde)
     {
         const int size = pde.get_coeff_a().size();
 
@@ -269,19 +255,18 @@ namespace dauphine
             double b = pde.get_coeff_b()[0];
             double c = pde.get_coeff_c()[0];
             double d = pde.get_coeff_d()[0];
-            this->compute_price(a,b,c,d);
-            
+            return this->compute_price(a,b,c,d);
             }
         else{
             std::vector<double> a = pde.get_coeff_a();
             std::vector<double> b = pde.get_coeff_b();
             std::vector<double> c = pde.get_coeff_c();
             std::vector<double> d = pde.get_coeff_d();
-            this->compute_price(a,b,c,d);
+            return this->compute_price(a,b,c,d);
             }
     }
 
-    void solver::compute_price(double& a, double& b, double& c, double& d)
+    matrix solver::compute_price(double& a, double& b, double& c, double& d)
     {       
             this->transform_coeff(a,b,c,d);
 
@@ -305,17 +290,11 @@ namespace dauphine
 
             this->solve_mesh(m_trans_1,m_trans_2,a,b,c,d,ndx,final_vect,final_poff,vect,mesh_matrix);
 
-
-            std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
-
-            //std::cout << mesh_matrix;
-
-            
-        
+            return mesh_matrix;
     
     }
 
-    void solver::compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d)
+    matrix solver::compute_price(std::vector<double>& a, std::vector<double>& b, std::vector<double>& c, std::vector<double>& d)
     {       
             this->transform_coeff(a,b,c,d);
 
@@ -339,10 +318,7 @@ namespace dauphine
 
             this->solve_mesh(m_trans_1,m_trans_2,a,b,c,d,ndx,final_vect,final_poff,vect,mesh_matrix);
 
-
-            std::cout << "Prix : " << mesh_matrix((ndx-1)/2,0) << std::endl << std::endl;
-
-            //std::cout << mesh_matrix;
+            return mesh_matrix;
 
             
     

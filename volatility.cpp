@@ -5,6 +5,11 @@ namespace dauphine
 
 volatility::volatility(){};
 
+volatility::volatility(std::vector<double> v){
+    p_vol.resize(v.size());
+    p_vol = v;
+};
+
 vol_BS::vol_BS(double sigma)
 {
     p_vol.resize(1);
