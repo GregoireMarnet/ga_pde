@@ -12,6 +12,7 @@ class volatility{
 
     public : 
         volatility();
+        volatility(std::vector<double> v);
         std::vector<double> get_vol() const;
 
     protected:
