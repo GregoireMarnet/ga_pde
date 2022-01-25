@@ -24,8 +24,6 @@ namespace dauphine
             
             os << "Spot is : " << s.m_msh.get_spot() << std::endl;
 
-            os << "Log(Smax)  : " << s.m_msh.get_xmax() << std::endl;
-            os << "Log(Smin)  : " << s.m_msh.get_xmin() << std::endl;
             os << "Smax  : " << exp(s.m_msh.get_xmax()) << std::endl;
             os << "Smin  : " << exp(s.m_msh.get_xmin()) << std::endl;
             os << std::endl;
@@ -34,8 +32,8 @@ namespace dauphine
             os << "Lower Bound : " << s.m_bd.get_lower_b() << std::endl << std::endl;
             os << std::endl;
 
-            os << "dt : " << s.m_msh.get_dt() << std::endl;
-            os << "dx : " << s.m_msh.get_dx() << std::endl;
+            os << "ndt : " << s.m_msh.get_ndt() << std::endl;
+            os << "ndx : " << s.m_msh.get_ndx() << std::endl;
             os << std::endl;
 
     
@@ -88,13 +86,6 @@ namespace dauphine
         void fill_matrix(matrix& mesh_matrix, int t, std::vector<double> vect);
 
         std::vector<double> solve_tridiag(const matrix& mat, std::vector<double>& d);
-
-        
-        /*std::vector<double> solve_system(dauphine::matrix m1_inv, dauphine::matrix m_trans_2, 
-                                        std::vector<double> final_vect,
-                                        std::vector<double> vect, int ndx);
-
-        */
 
         private :
             mesh& m_msh;

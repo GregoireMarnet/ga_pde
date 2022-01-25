@@ -4,12 +4,9 @@
 namespace dauphine
 {
 
-    solver::solver(payoff& poff,
-                    mesh& msh, 
-                    boundary& bd,
-                    double theta)
+    solver::solver(payoff& poff, mesh& msh, boundary& bd, double theta)
     : m_poff(poff), m_msh(msh), m_bd(bd), m_theta(theta)
-    {};
+    {}; 
 
     void solver::transform_coeff(std::vector<double>& a,
                         std::vector<double>& b,
@@ -20,8 +17,8 @@ namespace dauphine
         const double dx = m_msh.get_dx();
         const double nu1 = dt / pow(dx,2);
         const double nu2 = dt / dx;
-        //std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
-        
+    
+    
         std::vector<double> A = a;
         std::vector<double> B = b;
         std::vector<double> C = c;
@@ -45,7 +42,6 @@ namespace dauphine
     {
         const double nu1 = m_msh.get_dt() / pow(m_msh.get_dx(),2);
         const double nu2 = m_msh.get_dt() / m_msh.get_dx();
-        //std::cout << "nu1 : " << nu1 << " and nu2 : " << nu2 << std::endl;
 
         double A = a;
         double B = b;
@@ -204,10 +200,6 @@ namespace dauphine
 
             this->fill_matrix(mesh_matrix,i,final_poff);
         };
-
-        //std::cout << m_trans_1;
-        //std::cout << m_trans_2;
-        //std::cout <<vect;
     }
     
     void solver::solve_mesh(matrix& m_trans_1,matrix& m_trans_2,
@@ -237,11 +229,6 @@ namespace dauphine
 
             this->fill_matrix(mesh_matrix,i,final_poff);
         };
-
-        //std::cout << m_trans_1;
-        //std::cout << m_trans_2;
-        //std::cout <<vect;
-        //std::cout <<final_vect;
     }
 
 
@@ -276,7 +263,7 @@ namespace dauphine
             matrix m_trans_1(ndx-2,ndx-2);
             matrix m_trans_2(ndx-2,ndx-2);
 
-            std::vector<double> vect(ndx-2);    // ATTENTION AU COEFF D
+            std::vector<double> vect(ndx-2); 
 
             matrix mesh_matrix(ndx,ndt);
         
@@ -304,7 +291,7 @@ namespace dauphine
             matrix m_trans_1(ndx-2,ndx-2);
             matrix m_trans_2(ndx-2,ndx-2);
 
-            std::vector<double> vect(ndx-2);    // ATTENTION AU COEFF D
+            std::vector<double> vect(ndx-2);   
 
             matrix mesh_matrix(ndx,ndt);
         

@@ -3,15 +3,14 @@
 #include <vector>
 
 
-
 namespace dauphine {
     double delta(const matrix& result, const std::vector<double>& x_axis, const int& index){
-        return (result(index-1,0)- result(index,0))/(exp(x_axis[index])-exp(x_axis[index-1]));
+        return (result(index+1,0)- result(index-1,0))/(exp(x_axis[index-1])-exp(x_axis[index+1]));
     }
 
     double gamma(const matrix& result, const std::vector<double>& x_axis){
         int index = x_axis.size()/2;
-        return (delta(result,x_axis,index-1)-delta(result,x_axis,index))/(exp(x_axis[index])-exp(x_axis[index-1]));
+        return (delta(result,x_axis,index)-delta(result,x_axis,index-1))/(exp(x_axis[index-1])-exp(x_axis[index]));
     }
 
     double vega(const matrix& result, solver& solv, const volatility& vol, const rate& r, const int& ndx){
@@ -33,7 +32,5 @@ namespace dauphine {
     double theta(const matrix& result, const double& dt, const double& index){
         return (result(index,1)-result(index,0))/dt;
     }
-
-    
 
 }
