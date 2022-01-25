@@ -51,49 +51,113 @@
 int main(int argc, const char * argv[])
 {
     // Parameters of the option
-    const bool is_call = true;
-    const double spot = 100.;
-    const double strike = 100.;
-    const double maturity = 1.; // in years
-    const double v0 = 0.10;
-    const double r0 = 0.05;
+    std::cout << std::endl;
+    std::cout << "While waiting for the next release, the pricer is only able to price vanilla options." << std::endl;
+    std::cout << "Do you want to price a call or a put ? Enter p for put or c for call : ";
+    char type[1];
+    std::cin >> type;
+    bool is_call;
+    if (strcmp(type,"c")==0){
+        is_call = true;
+    }
+    else {
+        is_call = false;
+    }
+    std::cout << std::endl;
+    std::cout << "Now please give the different parameters of the option" << std::endl;
+    std::cout << "Spot : ";
+    double spot;
+    std::cin >> spot;
+    std::cout << "Strike : ";
+    double strike;
+    std::cin >> strike;
+    std::cout << "Maturity (in years) : ";
+    double maturity;
+    std::cin >> maturity;
+    std::cout << "Initial implied volatility (ex 0.10): ";
+    double v0 ;
+    std::cin >> v0;
+    std::cout << "Initial interest rate (ex 0.05): ";
+    double r0 ;
+    std::cin >> r0;
+    std::cout << std::endl;
     
     // Parameters of the mesh space 
-    const int ndx = 501; // enter odd number 
-    const int ndt = 100;
+    std::cout << "Now please specify the parameters of the mesh space." << std::endl;
+    std::cout << "Number of points for the price discretisation (please enter odd number, ex 101 ): ";
+    int ndx ;// enter odd number 
+    std::cin >> ndx;
+    std::cout << "Number of points for the time discretisation (ex 100) : ";
+    int ndt ;// enter odd number 
+    std::cin >> ndt;
+    std::cout << std::endl;
 
     // Theta scheme parameter
-    const double theta = 0.5;
+    std::cout << "The price will be computed using a finite difference method. " << std::endl;
+    std::cout << "Please give a theta scheme parameter between 0 and 1 : ";
+    double theta;
+    std::cin >> theta;
+    std::cout << std::endl;
 
     // Parameters to implement an heston model 
-    const double kappa = 2;
-    const double heston_theta = 0.12;
+    std::cout << "Do you want to implement an heston model ? y for yes, n for no : " ;
+    char vol_type[1];
+    std::cin >> vol_type;
+    bool is_heston;
+    double kappa = 0 ;
+    double heston_theta = 0;
+    if (strcmp(vol_type,"y")==0){
+        is_heston = true;
+        std::cout << "Kappa of the volatility diffusion (ex 2) : ";
+        std::cin >> kappa;
+        std::cout << "Theta of the volatility diffusion (ex 0.12) : ";
+        std::cin >> heston_theta;
+    }
+    else {
+        is_heston = false;
+    }
 
+    //Parameters for increasing interest rate :
+    std::cout << "Do you want to use a constant interest rate ? y for yes, n for no : " ;
+    char rate_type[1];
+    std::cin >> rate_type;
+    double alpha = 0 ;
+    if (strcmp(rate_type,"n")==0){
+        std::cout << "Enter a rate of increase at each time step (ex 0.0001): ";
+        std::cin >> alpha;
+    } 
+    std::cout << std::endl;
     // Mesh space definition
     dauphine::mesh msh(spot, maturity,ndx,ndt,v0);
-    dauphine::vanilla_poff poff_call(strike, is_call); 
-    dauphine::dirichlet bound(poff_call,msh.get_xmin(),msh.get_xmax());
+    dauphine::vanilla_poff poff(strike, is_call); 
+    dauphine::dirichlet bound(poff,msh.get_xmin(),msh.get_xmax());
 
     // Constant parameters definition
     dauphine::vol_BS vol(v0);
-    dauphine::rate rate(r0,msh,0.);
 
     // Non-constant parameters definition
     dauphine::vol_heston vol_h(v0,kappa,heston_theta,msh);
-    dauphine::rate rg(r0, msh, 0.);
-    
-    // Definition of the pde to solve
-    dauphine::pde_european pde(vol,rate);
+    dauphine::rate rate(r0, msh, alpha);
     
     // Building finite difference method parameters
-    dauphine::solver solv(poff_call, msh, bound, theta);
+    dauphine::solver solv(poff, msh, bound, theta);
     std::cout << solv << std::endl;
 
     // Results
     double cf  =  dauphine::bs_price(spot,strike,v0,maturity,is_call) ;
     std::cout << "Closed form price : " << cf << " (with assumption r=0)" << std::endl;
-    dauphine::matrix result = solv.price(pde);
-    std::cout << "Finite difference method price : " << result((ndx-1)/2,0) << std::endl << std::endl;
+
+    dauphine::matrix result(ndx,ndt);
+    if(is_heston){
+        dauphine::pde_european pde(vol_h,rate);
+        result+=solv.price(pde);
+    }
+    else{
+        dauphine::pde_european pde(vol,rate);
+        result+=solv.price(pde);
+    }
+    std::cout << "Finite difference method price : " << result((ndx-1)/2,0) << std::endl;
+    std::cout << "Difference : " << cf - result((ndx-1)/2,0) << std::endl << std::endl;
     
     //Greeks
     double delta = dauphine::delta(result,msh.get_xaxis(),ndx/2);
