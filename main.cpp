@@ -174,6 +174,16 @@ int main(int argc, const char * argv[])
 
     double t = dauphine::theta(result,msh.get_dt(),ndx/2);
     std::cout << "Theta : " << t << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Do you want to see the full mesh matrix ? y for yes, n for no : ";
+    char mat[1];
+    std::cin >> mat;
+    
+    if (strcmp(mat,"y")==0){
+        std::cout << std::endl;
+        std::cout << result;
+    } 
 
     return 0;
 }
